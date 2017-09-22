@@ -1,0 +1,30 @@
+# NEO4J
+spring.data.neo4j.username=xxx
+spring.data.neo4j.password=xxx
+spring.data.neo4j.uri=xxx
+
+# MONGODB
+spring.data.mongodb.host=xxx
+spring.data.mongodb.port=xxx
+spring.data.mongodb.database=xxx
+
+# MVC VIEWS
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+# LOGGING
+logging.level.root=WARN
+logging.level.org.springframework.data=INFO
+logging.level.org.neo4j=WARN
+logging.level.epimed_web=DEBUG
+logging.pattern.console=%d{dd/MM/yy HH:mm} %clr(%5p) %clr(%logger{10}){cyan} - %msg%n
+
+# SPRING BANNER
+spring.main.banner-mode=off
+
+# UPLOAD MULTIPART
+spring.http.multipart.max-file-size=10MB
+spring.http.multipart.max-request-size=10MB
+
+# PRETTY JSON
+spring.jackson.serialization.INDENT_OUTPUT=true
