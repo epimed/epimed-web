@@ -1,4 +1,4 @@
-package epimed_web.repository.mongodb.admin;
+package epimed_web.repository.mongodb.jobs;
 
 import java.util.List;
 
@@ -8,31 +8,31 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import epimed_web.entity.mongodb.admin.Log;
+import epimed_web.entity.mongodb.jobs.Job;
 
-public class LogRepositoryImpl implements LogRepositoryCustom {
-
+public class JobRepositoryImpl implements JobRepositoryCustom {
+	
 	@Autowired
 	private MongoTemplate mongoTemplate;
-
+	
 	/** ===================================================================================== */ 
 
-	public List<Log> findLastLogs(Integer maxNumber) {
+	public List<Job> findLastLogs(Integer maxNumber) {
 		Query query = new Query();
 		query.with(new Sort(Sort.Direction.DESC, "lastActivity"));
 		if (maxNumber!=null) {
 			query.limit(maxNumber);
 		}
-		return mongoTemplate.find(query, Log.class);
+		return mongoTemplate.find(query, Job.class);
 	}
 
 	/** ===================================================================================== */ 
 	
-	public List<Log> findByIPs(List<String> listIPs) {
+	public List<Job> findByIPs(List<String> listIPs) {
 		Criteria criteria = Criteria.where("single_ip").in(listIPs);
-		return mongoTemplate.find(Query.query(criteria), Log.class);
+		return mongoTemplate.find(Query.query(criteria), Job.class);
 	}
 
+	
 	/** ===================================================================================== */ 
-
 }

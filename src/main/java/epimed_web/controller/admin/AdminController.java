@@ -8,19 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import epimed_web.entity.mongodb.admin.Log;
 import epimed_web.entity.mongodb.admin.Role;
 import epimed_web.entity.mongodb.admin.User;
+import epimed_web.entity.mongodb.jobs.Job;
 import epimed_web.entity.mongodb.jobs.JobHeader;
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.repository.mongodb.admin.LogRepository;
 import epimed_web.repository.mongodb.admin.UserRepository;
 import epimed_web.repository.mongodb.jobs.JobHeaderRepository;
+import epimed_web.repository.mongodb.jobs.JobRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.mongodb.LogService;
+import epimed_web.service.mongodb.jobs.JobElementService;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,14 +41,70 @@ public class AdminController extends ApplicationLogger {
 
 	@Autowired
 	public JobHeaderRepository jobHeaderRepository;
+	
+	@Autowired
+	public JobRepository jobRepository;
+	
+	@Autowired
+	public JobElementService jobElementService;
 
 
 	/** ====================================================================================== */
 
+	@RequestMapping(value = {"/purge/{target}"}, method = RequestMethod.GET)
+	public String purge (
+			Model model,
+			@PathVariable("target") String target,
+			HttpServletRequest request) {
+
+		// === Access ===
+		if (!this.isAdmin(request)) {
+			model.addAttribute("errorMessage", "Access denied");
+			return "error";
+		}
+
+		String singleIp = logService.getSingleIp();
+		User user = userRepository.findByIp(singleIp);
+		List<String> listIPs = user.getIp();
+		
+		
+		// ===== Logs =====
+		
+		if (target!=null && target.startsWith("log")) {
+			List<Log> logs = logRepository.findByIPs(listIPs);
+			for (Log log: logs) {
+				logRepository.delete(log);
+			}
+			return "redirect:/admin/log";
+		}
+		
+		// ===== Jobs =====
+		
+		if (target!=null && target.startsWith("job")) {
+			List<Job> jobs = jobRepository.findByIPs(listIPs);
+			for (Job job: jobs) {
+				jobElementService.deleteJobElements(job.getId());
+				jobRepository.delete(job);
+			}
+			return "redirect:/admin/job";
+		}
+		
+		model.addAttribute("message", "Target not recognized");
+		return "message";
+	}
+
+	/** ====================================================================================== */
+
 	@RequestMapping(value = {"/header"}, method = RequestMethod.GET)
-	public void createHeaders (
+	public String createHeaders (
 			Model model,
 			HttpServletRequest request) {
+
+		// === Access ===
+		if (!this.isAdmin(request)) {
+			model.addAttribute("errorMessage", "Access denied");
+			return "error";
+		}
 
 		List<String> h1 = new ArrayList<String>();
 		h1.add("your_input");
@@ -70,7 +130,8 @@ public class AdminController extends ApplicationLogger {
 		JobHeader j2 = new JobHeader(JobType.update, h2);
 		jobHeaderRepository.save(j2);
 
-
+		model.addAttribute("message", "Job headers have been initialized");
+		return "message";
 
 	}
 
@@ -106,6 +167,43 @@ public class AdminController extends ApplicationLogger {
 		model.addAttribute("logs", logs);
 
 		return "admin/log";
+
+	}
+
+	/** ====================================================================================== */
+	
+	
+
+	@RequestMapping(value = {"/job", "/jobs"}, method = RequestMethod.GET)
+	public String jobs (
+			Model model,
+			HttpServletRequest request) {
+
+		// === Access ===
+		if (!this.isAdmin(request)) {
+			model.addAttribute("errorMessage", "Access denied");
+			return "error";
+		}
+
+		// === Default unknown user ===
+		User defaultUser = new User();
+		defaultUser.setFirstName("Unknown");
+		defaultUser.setLastName("user");
+
+		List<Job> jobs = jobRepository.findLastLogs(300);
+
+		for (Job job: jobs) {
+			User user = userRepository.findByIp(job.getSingleIp());
+			if (user!=null) {
+				job.setUser(user);
+			}
+			else {
+				job.setUser(defaultUser);
+			}
+		}
+		model.addAttribute("jobs", jobs);
+
+		return "admin/job";
 
 	}
 

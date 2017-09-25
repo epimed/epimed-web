@@ -8,19 +8,21 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import epimed_web.entity.mongodb.admin.User;
+
 @Document(collection = "job")
 @TypeAlias("Job")
 public class Job {
 
 	@Id
 	private String id;
-	
+
 	@Field("submission_date")
 	private Date submissionDate;
-	
+
 	@Field("last_activity")
 	private Date lastActivity;
-	
+
 	private Integer total;
 	private Integer current;
 	private JobType type;
@@ -28,13 +30,16 @@ public class Job {
 	private JobStatus status;
 	private String comment;
 	private String ip;
-	
+
 	@Field("single_ip")
 	private String singleIp;
-	
+
 	private String method;
 	private String url;
-	
+
+	// can be later used for dispalying
+	private User user;
+
 	public Job() {
 		super();
 	}
@@ -142,6 +147,16 @@ public class Job {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public String toString() {
@@ -151,6 +166,6 @@ public class Job {
 				+ url + "]";
 	}
 
-	
+
 
 }

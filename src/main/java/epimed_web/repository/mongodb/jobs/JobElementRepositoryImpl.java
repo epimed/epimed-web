@@ -10,11 +10,14 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 
+import epimed_web.entity.mongodb.jobs.JobElement;
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.service.log.ApplicationLogger;
 
@@ -27,6 +30,13 @@ public class JobElementRepositoryImpl extends ApplicationLogger implements JobEl
 	private MongoDatabase mongoDatabase;
 
 	private String collectionName = "job_element";
+
+	/** ================================================================================= */
+
+	public List<JobElement> findJobElementsByJobid(String jobid) {
+		Criteria criteria = Criteria.where("jobs").in(jobid);
+		return mongoTemplate.find(Query.query(criteria), JobElement.class);
+	}
 
 	/** ================================================================================= */
 

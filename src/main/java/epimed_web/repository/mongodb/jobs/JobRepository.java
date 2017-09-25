@@ -4,6 +4,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import epimed_web.entity.mongodb.jobs.Job;
 
-public interface JobRepository extends MongoRepository<Job, String> {
+public interface JobRepository extends MongoRepository<Job, String>, JobRepositoryCustom {
 
 }

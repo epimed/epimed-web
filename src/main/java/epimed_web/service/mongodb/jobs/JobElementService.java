@@ -2,7 +2,9 @@ package epimed_web.service.mongodb.jobs;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,32 @@ public class JobElementService extends ApplicationLogger {
 	private JobElementRepository jobElementRepository;
 
 
+	/** ================================================================================= */
+	
+	public void deleteJobElements(String jobid) {
+		
+		List<JobElement> jobElements = jobElementRepository.findJobElementsByJobid(jobid);
+		
+		for (JobElement jobElement: jobElements) {
+			
+			Set<String> jobs = new HashSet<String>();
+			jobs.addAll(jobElement.getJobs());
+		
+			// Job element belongs only to one job, can be removed
+			if (jobs!=null && jobs.size()==1) {
+				jobElementRepository.delete(jobElement);
+			}
+			
+			// Job element belongs to other job, should be kept
+			if (jobs!=null && jobs.size()==1) {
+				jobs.remove(jobid);
+				jobElement.setJobs(jobs);
+				jobElementRepository.save(jobElement);
+			}
+			
+		}
+	}
+	
 	/** ================================================================================= */
 
 	public boolean createJobElments(String jobid, String element, Integer taxid, int nbDaysExpiration, AjaxForm ajaxForm) {

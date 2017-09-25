@@ -41,6 +41,7 @@ public class Gene {
 	@Relationship(type="REPLACED_BY", direction=Relationship.OUTGOING)
 	private Gene currentGene;
 	
+	private String feature;
 	
 	public Gene() {
 		super();
@@ -165,9 +166,17 @@ public class Gene {
 	public void setCurrentGene(Gene currentGene) {
 		this.currentGene = currentGene;
 	}
+	
 
-	
-	
+	public String getFeature() {
+		return feature;
+	}
+
+
+	public void setFeature(String feature) {
+		this.feature = feature;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -200,9 +209,9 @@ public class Gene {
 	public String toString() {
 		return "Gene [graphId=" + graphId + ", uid=" + uid + ", geneSymbol=" + geneSymbol + ", title=" + title
 				+ ", chrom=" + chrom + ", location=" + location + ", type=" + type + ", status=" + status + ", taxId="
-				+ taxId + ", aliases=" + aliases + ", replacedBy=" + replacedBy + ", currentGene=" + currentGene + "]";
+				+ taxId + ", aliases=" + aliases + ", replacedBy=" + replacedBy + ", currentGene=" + currentGene
+				+ ", feature=" + feature + "]";
 	}
-
 
 	
 }

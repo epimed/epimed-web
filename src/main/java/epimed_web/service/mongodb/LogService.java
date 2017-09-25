@@ -24,7 +24,6 @@ public class LogService {
 	public HttpServletRequest request;
 
 
-
 	/** ================================================================================= */
 
 	public void log () {

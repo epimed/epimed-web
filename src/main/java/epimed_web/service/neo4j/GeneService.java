@@ -379,7 +379,7 @@ public class GeneService extends ApplicationLogger {
 				// === Status ===
 
 				Object status = docgene.get("status");
-				if (status==null) {
+				if (status==null || status.equals("")) {
 					gene.setStatus(GeneStatus.active);
 				}
 				else {
