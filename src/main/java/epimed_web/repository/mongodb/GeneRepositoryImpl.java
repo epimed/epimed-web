@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import epimed_web.entity.mongodb.Gene;
+import epimed_web.entity.mongodb.genes.Gene;
 
 public class GeneRepositoryImpl implements GeneRepositoryCustom {
 

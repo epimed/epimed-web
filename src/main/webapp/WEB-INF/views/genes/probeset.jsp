@@ -28,7 +28,10 @@
 		document.getElementById("idSelectedPlatform").addEventListener(
 				'change', updateForm, false);
 		idSelectedPlatform = document.getElementById("idSelectedPlatform").value;
+		url = "ajax/upload";
 		jobtype = "probeset";
+		jobid = "";
+		enableSubmitButtonAfterUpload = true;
 		document.getElementById('submitButton').addEventListener('click',
 				startSubmit, false);
 	}

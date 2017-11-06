@@ -1,12 +1,11 @@
 package epimed_web.form;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.entity.neo4j.Gene;
+import epimed_web.entity.neo4j.Probeset;
 
 public class AjaxForm {
 
@@ -22,7 +21,7 @@ public class AjaxForm {
 	private String source;
 	
 	private List<Gene> listGenes = new ArrayList<Gene>();
-	private Set<String> probesets = new HashSet<String>();
+	private List<Probeset> probesets = new ArrayList<Probeset>();
 	
 	public AjaxForm() {
 		super();
@@ -100,11 +99,13 @@ public class AjaxForm {
 		this.listGenes = listGenes;
 	}
 
-	public Set<String> getProbesets() {
+	
+
+	public List<Probeset> getProbesets() {
 		return probesets;
 	}
 
-	public void setProbesets(Set<String> probesets) {
+	public void setProbesets(List<Probeset> probesets) {
 		this.probesets = probesets;
 	}
 

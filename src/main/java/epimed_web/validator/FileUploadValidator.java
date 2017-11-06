@@ -27,7 +27,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import epimed_web.entity.pojo.FileUpload;
-import epimed_web.repository.mongodb.SampleRepository;
+import epimed_web.repository.mongodb.experiments.SampleRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.util.FileService;
 import epimed_web.service.util.FormatService;

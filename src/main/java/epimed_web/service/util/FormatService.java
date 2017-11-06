@@ -15,6 +15,7 @@ package epimed_web.service.util;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,27 +26,11 @@ import java.util.Set;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
 
-import epimed_web.entity.mongodb.Sample;
+import epimed_web.entity.mongodb.experiments.Sample;
 import epimed_web.service.log.ApplicationLogger;
 
 @Service
 public class FormatService extends ApplicationLogger {
-
-
-	/** =============================================================================== */
-
-	public String removeVersion(String symbol) {
-
-		if (symbol.contains(".")) {
-			int indexPoint = symbol.indexOf(".");
-			if (indexPoint>2 && !symbol.startsWith("uc")) {
-				symbol =symbol.split("\\.")[0];
-			}
-		}
-
-		return symbol;
-
-	}
 	
 	/** ================================================================================= */
 
@@ -124,12 +109,29 @@ public class FormatService extends ApplicationLogger {
 		String [] array = null;
 
 		if (list!=null && !list.isEmpty()) {
-			array = list.trim().replaceAll("['\"]", "").split("[,;:\\p{Space}][\\p{Space}]*");
+			array = list.trim().replaceAll("'\"]", "").split("[,;:\\p{Space}][\\p{Space}]*");
 		}
 
 		return array;
 	}
 
+	/** ================================================================================= */
+
+	public List<String> convertStringToList (String list) {
+		List<String> result = null;
+		
+		String [] array = this.convertStringToArray(list);
+		
+		try {
+			result = Arrays.asList(array);
+		}
+		catch (Exception e) {
+			// nothing to do
+		}
+		return result;
+	}
+
+	
 	/** ================================================================================= */
 
 	public List<Object> convertHomogeneousMongoDocuments (List<Document> listDocuments) {

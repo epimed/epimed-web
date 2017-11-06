@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.mongodb.client.model.Filters;
 
-import epimed_web.repository.mongodb.SeriesRepository;
+import epimed_web.repository.mongodb.experiments.SeriesRepository;
 import epimed_web.service.util.FormatService;
 
 
@@ -85,8 +85,6 @@ public class SeriesService {
 
 	}
 
-
 	/** ====================================================================================== */
-
 
 }

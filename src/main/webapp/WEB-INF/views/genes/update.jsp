@@ -14,6 +14,9 @@
 <script>
 	window.onload = function() {
 		jobtype = "update";
+		url = "ajax/upload";
+		jobid = "";
+		enableSubmitButtonAfterUpload = true;
 		document.getElementById('submitButton').addEventListener('click',
 				startSubmit, false);
 	}

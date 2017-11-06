@@ -2,7 +2,7 @@ package epimed_web.repository.mongodb;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import epimed_web.entity.mongodb.Expression;
+import epimed_web.entity.mongodb.genes.Expression;
 
 
 public interface ExpressionRepository extends MongoRepository<Expression, String>, ExpressionRepositoryCustom {

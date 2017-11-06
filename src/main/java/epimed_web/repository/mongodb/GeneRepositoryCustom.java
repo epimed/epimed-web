@@ -2,7 +2,7 @@ package epimed_web.repository.mongodb;
 
 import java.util.List;
 
-import epimed_web.entity.mongodb.Gene;
+import epimed_web.entity.mongodb.genes.Gene;
 
 public interface GeneRepositoryCustom {
 	

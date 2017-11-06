@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 public class WebService {
 	
 	private URL url;
+	
+	@SuppressWarnings("unused")
 	private Scanner scan;
+	
 	private boolean DEBUG = false;
 
 	/** ====================================================================================== */

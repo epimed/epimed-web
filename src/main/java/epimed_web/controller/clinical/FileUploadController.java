@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import epimed_web.entity.pojo.FileUpload;
-import epimed_web.repository.mongodb.SampleRepository;
+import epimed_web.repository.mongodb.experiments.SampleRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.util.FileService;
 import epimed_web.service.util.FormatService;

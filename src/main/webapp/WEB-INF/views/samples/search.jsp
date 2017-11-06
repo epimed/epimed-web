@@ -186,7 +186,7 @@
 					<button type="submit" class="btn btn-default btn-sm"
 						name="downloadButton" value="parameters">
 						<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
-						Download supplementary parameters CSV
+						Download original parameters CSV
 					</button>
 
 					<h3>Direct download link:</h3>

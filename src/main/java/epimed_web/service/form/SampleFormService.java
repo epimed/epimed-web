@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import epimed_web.form.SampleForm;
-import epimed_web.repository.mongodb.SampleRepository;
+import epimed_web.repository.mongodb.experiments.SampleRepository;
 import epimed_web.service.mongodb.SampleService;
 
 @Service

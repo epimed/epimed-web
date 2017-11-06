@@ -2,7 +2,7 @@
  * Custom Javascript functions
  */
 
-var listElements, totalElements, totalUploaded, currentIndex, taxid, jobid, idSelectedPlatform, jobtype;
+var url, listElements, totalElements, totalUploaded, currentIndex, taxid, jobid, idSelectedPlatform, jobtype, enableSubmitButtonAfterUpload;
 
 /** ========================================================================== */
 
@@ -25,9 +25,9 @@ function updateProgressBar(percentComplete) {
 
 /** ========================================================================== */
 
-// On processing
+//On processing
 function onUploadProgress(e) {
-	debug("Processing symbol " + listElements[currentIndex] + "\t ("
+	debug("Processing " + listElements[currentIndex] + "\t ("
 			+ (totalUploaded + 1) + "/" + totalElements + ")");
 }
 
@@ -41,8 +41,11 @@ function onUploadComplete(e) {
 	// console.log(e);
 
 	jobid = ajaxResponse.jobid;
-	document.getElementById("jobid").innerHTML = "Job ID " + jobid;
-	
+	var jobidElement = document.getElementById("jobid")
+	if (jobidElement!=null) {
+		jobidElement.innerHTML = "Job ID " + jobid;
+	}
+
 	totalUploaded = totalUploaded + 1;
 	currentIndex = currentIndex + 1;
 	if (totalUploaded < totalElements) {
@@ -60,24 +63,27 @@ function onUploadComplete(e) {
 /** ========================================================================== */
 
 function onUploadFailed(e) {
-	debug("Error catched while uploading " + listElements[currentIndex]);
+	debug("Error catched while processing " + listElements[currentIndex]);
 }
 
 /** ========================================================================== */
 
 function init() {
-	
-	// === Initiate jobid ===
-	jobid = "";
-	
+
 	// === Initiate global variables ===
 	var input = document.getElementById('input');
-	listElements = convertStringToArray(input.value);
-	totalElements = listElements.length;
+	if (input!=null) {
+		listElements = convertStringToArray(input.value);
+	}
+
+	totalElements = 0;
+	if (listElements!=null) {
+		totalElements = listElements.length;
+	}
 	totalUploaded = 0;
 	currentIndex = 0;
 	setTaxid();
-	
+
 	// === Manage DOM elements ===
 	updateProgressBar(0);
 	document.getElementById("debug").innerHTML = "";
@@ -107,7 +113,6 @@ function uploadNext() {
 	xhr.upload.addEventListener("progress", onUploadProgress, false);
 	xhr.addEventListener("load", onUploadComplete, false);
 	xhr.addEventListener("error", onUploadFailed, false);
-	var url = "ajax/upload";
 	xhr.open("POST", url, true);
 	xhr.send(fd);
 }
@@ -118,14 +123,17 @@ function terminate() {
 	debug("Job terminated");
 	debug("File(s) generated, please click on download link(s) below");
 	manageElement('downloadButton', ['show', 'enable']);
-	document.getElementById('submitButton').disabled = false;
+
+	if (enableSubmitButtonAfterUpload==null || enableSubmitButtonAfterUpload) {
+		document.getElementById('submitButton').disabled = false;
+	}
 }
 
 /** ========================================================================== */
 
 function manageElement(name, actions) {
 
-	var buttons = document.getElementsByName('downloadButton');
+	var buttons = document.getElementsByName(name);
 
 	for (i=0; i<buttons.length; i++) {
 		var button = buttons[i];
@@ -157,15 +165,17 @@ function manageElement(name, actions) {
 
 function setTaxid() {
 	var organisms = document.getElementsByName('organism');
-	var i = 0;
-	var isFound = false;
-	taxid = 9606; // default value Homo sapiens
-	while (!isFound && i < organisms.length) {
-		if (organisms[i].checked) {
-			isFound = true;
-			taxid = organisms[i].value;
+	if (organisms!=null) {
+		var i = 0;
+		var isFound = false;
+		taxid = 9606; // default value Homo sapiens
+		while (!isFound && i < organisms.length) {
+			if (organisms[i].checked) {
+				isFound = true;
+				taxid = organisms[i].value;
+			}
+			i = i + 1;
 		}
-		i = i + 1;
 	}
 }
 
@@ -174,6 +184,7 @@ function setTaxid() {
 
 function convertStringToArray(text) {
 	try {
+		text = text.replace(/\[|\]/gi, "");
 		return text.trim().split(/[\s,\s;\s:\s|]+/);
 	} catch (err) {
 		debug("ERROR. " + err.message);
@@ -198,13 +209,6 @@ function getJob(format) {
 	var url = "job/download/?" + "jobid=" + jobid + "&format=" + format;
 	debug("Download file in format " + format + " for jobid " + jobid);
 	window.location.href = url;
-}
-
-/** ========================================================================== */
-
-window.onload = function() {
-	document.getElementById('submitButton').addEventListener('click',
-			startSubmit, false);
 }
 
 /** ========================================================================== */

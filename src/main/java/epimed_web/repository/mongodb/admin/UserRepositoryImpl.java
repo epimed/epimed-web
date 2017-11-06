@@ -1,6 +1,9 @@
 package epimed_web.repository.mongodb.admin;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,5 +24,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	}
 
 	/** ===================================================================================== */
+	
+	public List<User> findAllSortedByLastName() {
+		Query query = new Query();
+		query.with(new Sort(Sort.Direction.ASC, "lastName"));
+		return mongoTemplate.find(query, User.class);
+	}
 	
 }

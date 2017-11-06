@@ -8,4 +8,5 @@ public interface JobRepositoryCustom {
 
 	public List<Job> findLastLogs(Integer maxNumber);
 	public List<Job> findByIPs(List<String> listIPs);
+	public List<Job> findByIPs(List<String> listIPs, Integer maxNumber);
 }

@@ -28,11 +28,20 @@ public class LogRepositoryImpl implements LogRepositoryCustom {
 
 	/** ===================================================================================== */ 
 	
-	public List<Log> findByIPs(List<String> listIPs) {
+	public List<Log> findByIPs(List<String> listIPs, Integer maxNumber) {
 		Criteria criteria = Criteria.where("single_ip").in(listIPs);
-		return mongoTemplate.find(Query.query(criteria), Log.class);
+		Query query = Query.query(criteria);
+		query.with(new Sort(Sort.Direction.DESC, "lastActivity"));
+		if (maxNumber!=null) {
+			query.limit(maxNumber);
+		}
+		return mongoTemplate.find(query, Log.class);
 	}
 
 	/** ===================================================================================== */ 
 
+	public List<Log> findByIPs(List<String> listIPs) {
+		return this.findByIPs(listIPs, null);
+	}
+	/** ===================================================================================== */ 
 }

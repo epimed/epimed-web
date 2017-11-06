@@ -45,12 +45,38 @@
 		
 		<div>
 <pre><code>url = "${globalApplicationRootUrl}/query/jobs?jobid=YOUR_JOB_ID"
-df = read.csv2(url, header=TRUE, sep=";", stringsAsFactors=FALSE, dec=".", na.strings="")
+df = read.csv2(url, header=TRUE, sep=";")
 </code></pre>
 		</div>
 
-	</div>
 
+	<h2>Query for tissue-specific genes</h2>
+	<p>To query tissue-specific gene your need to know:</p>
+	<ul>
+		<li>Gene annotation corresponding to your search (ex. RNASEQ_restricted_testis). 
+		Please, check a <a href="${pageContext.request.contextPath}/annotations">list of currently available annotations</a>.</li>
+		<li>Organism taxid: 9606 for Homo sapiens, 10090 for Mus musculus</li>
+	</ul>
+	
+	
+	<p>The query will generate a CSV file that you can download or directly import into your R code</p>
+	
+	<div>
+<pre><code>url = "${globalApplicationRootUrl}/query/genes?annotations=ANNOTATION&taxid=TAXID"
+df = read.csv2(url, header=TRUE, sep=";")
+</code></pre>
+	</div>
+	
+	<h3>Example</h3>
+	<p>Humain testis-specific genes as defined by RNA-seq</p>
+	<p><a href="${globalApplicationRootUrl}/query/genes?annotations=RNASEQ_restricted_testis&taxid=9606">${globalApplicationRootUrl}/query/genes?annotations=RNASEQ_restricted_testis&taxid=9606</a></p>
+<div>
+<pre><code>url = "${globalApplicationRootUrl}/query/genes?annotations=RNASEQ_restricted_testis&taxid=9606"
+df = read.csv2(url, header=TRUE, sep=";")
+</code></pre>
+</div>
+	
+	</div>
 	<!-- Footer -->
 	<%@ include file="/resources/fragments/footer.jsp"%>
 </body>

@@ -41,8 +41,7 @@ public class GeneService extends ApplicationLogger {
 
 	public boolean populateBySymbolAndTaxid(AjaxForm ajaxForm) {
 
-		String originalSymbol = ajaxForm.getSymbol();
-		String symbol = formatService.removeVersion(ajaxForm.getSymbol());
+		String symbol = ajaxForm.getSymbol();
 		Integer taxid = ajaxForm.getTaxid();
 
 		List<Gene> genes = new ArrayList<Gene>();
@@ -50,7 +49,7 @@ public class GeneService extends ApplicationLogger {
 
 		// === Search by Gene ID Entrez ===
 
-		Integer idGene = formatService.convertStringToInteger(originalSymbol);
+		Integer idGene = formatService.convertStringToInteger(symbol);
 		if (idGene!=null) {
 			genes = geneRepository.findCurrentByIdGeneAndTaxid(idGene, taxid);	
 			if (genes.isEmpty()) {
@@ -128,7 +127,7 @@ public class GeneService extends ApplicationLogger {
 		boolean isFound = false;
 		while (!isFound && i<sources.length) {
 			sourceField = sources[i];
-			listIdGeneString.addAll(this.findListIdGeneFromNcbi(originalSymbol, sourceField, taxid));
+			listIdGeneString.addAll(this.findListIdGeneFromNcbi(symbol, sourceField, taxid));
 			isFound = listIdGeneString!=null && !listIdGeneString.isEmpty();
 			i++;
 		}
@@ -146,7 +145,7 @@ public class GeneService extends ApplicationLogger {
 		// === Recognize a symbol from Ensembl ===
 
 		Set<String> setIdEnsembl = new HashSet<String>();
-		List<Document> listDocEnsembl = this.findIdEnsemblFromEnsembl(originalSymbol, taxid, "gene");
+		List<Document> listDocEnsembl = this.findIdEnsemblFromEnsembl(symbol, taxid, "gene");
 		for (Document docEnsembl: listDocEnsembl) {
 			setIdEnsembl.add(docEnsembl.getString("id"));
 		}

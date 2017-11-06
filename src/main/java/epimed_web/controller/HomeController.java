@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import epimed_web.repository.mongodb.SampleRepository;
-import epimed_web.repository.mongodb.SeriesRepository;
+import epimed_web.repository.mongodb.experiments.SampleRepository;
+import epimed_web.repository.mongodb.experiments.SeriesRepository;
 import epimed_web.service.log.ApplicationLogger;
 
 @Controller

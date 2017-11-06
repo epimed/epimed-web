@@ -35,19 +35,21 @@
 
 				<!-- User -->
 				<div class="col-md-2">
-					<c:if test="${not empty job.user}">${job.user.firstName} ${job.user.lastName}</c:if>
+					<c:if test="${not empty job.user}"><a href="${pageContext.request.contextPath}/admin/job/${job.user.id}">${job.user.firstName} ${job.user.lastName} (${job.user.id})</a></c:if>
 				</div>
 
 				<!-- Job ID -->
-				<div class="col-md-2">${job.id}</div>
+				<div class="col-md-2"><a href="${pageContext.request.contextPath}/query/jobs?jobid=${job.id}&format=csv">${job.id}</a></div>
 
 				<!-- Nb Elements current / total -->
-				<div class="col-md-2">${job.current}/${job.total}</div>
+				<div class="col-md-2"><a href="${pageContext.request.contextPath}/admin/job/${job.type}">${job.type}</a> ${job.current}/${job.total}</div>
 
 				<!-- Status -->
 				<c:choose>
 					<c:when test="${job.status=='error'}">
-						<div class="col-md-1"><span class="text-danger">${job.status}</span></div>
+						<div class="col-md-1">
+							<span class="text-danger">${job.status}</span>
+						</div>
 					</c:when>
 					<c:otherwise>
 						<div class="col-md-1">${job.status}</div>
@@ -57,9 +59,13 @@
 
 			</div>
 
-			<!-- Created -->
+			<!-- Delete button and submitted date -->
 			<div class="row">
-				<div class="col-md-10 col-md-offset-2">
+				<div class="col-md-2">
+					<a
+						href="${pageContext.request.contextPath}/admin/job/delete/${job.id}">delete</a>
+				</div>
+				<div class="col-md-10">
 					Job submitted on
 					<fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss.SSS"
 						value="${job.submissionDate}" />
@@ -69,7 +75,7 @@
 			<!-- Parameter -->
 			<c:if test="${not empty job.elements}">
 				<div class="row">
-					<div class="col-md-10 col-md-offset-2 alert alert-info">${job.elements}</div>
+					<div class="col-md-10 col-md-offset-2 alert alert-info">${job.mainObject} ${job.elements}</div>
 				</div>
 			</c:if>
 

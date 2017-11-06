@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import epimed_web.form.SampleForm;
-import epimed_web.repository.mongodb.PlatformRepository;
-import epimed_web.repository.mongodb.SampleRepository;
+import epimed_web.repository.mongodb.experiments.PlatformRepository;
+import epimed_web.repository.mongodb.experiments.SampleRepository;
 import epimed_web.service.form.SampleFormService;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.util.FileService;

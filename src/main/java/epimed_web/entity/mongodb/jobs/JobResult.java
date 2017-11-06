@@ -1,25 +1,14 @@
 package epimed_web.entity.mongodb.jobs;
 
+import org.bson.Document;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @TypeAlias("JobResult")
-public class JobResult {
+public class JobResult extends Document{
 
-	@Field("your_input")
-	private String input;
-	
-
-	public JobResult() {
-		super();
-	}
-
-	public String getInput() {
-		return input;
-	}
-
-	public void setInput(String input) {
-		this.input = input;
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 }

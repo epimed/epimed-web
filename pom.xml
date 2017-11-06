@@ -61,7 +61,7 @@
 		</dependency>
 
 
-		<!-- Spring Boot -->
+		<!-- Spring Boot Tomcat -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
@@ -72,6 +72,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spring Boot Java Mail -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
 		<!-- JSTL for JSP -->

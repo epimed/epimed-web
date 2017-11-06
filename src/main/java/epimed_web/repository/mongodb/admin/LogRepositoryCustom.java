@@ -8,5 +8,6 @@ public interface LogRepositoryCustom {
 	
 	public List<Log> findLastLogs(Integer maxNumber);
 	public List<Log> findByIPs(List<String> listIPs);
+	public List<Log> findByIPs(List<String> listIPs, Integer maxNumber);
 
 }

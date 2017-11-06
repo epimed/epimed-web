@@ -11,10 +11,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import epimed_web.entity.mongodb.jobs.Job;
 
 public class JobRepositoryImpl implements JobRepositoryCustom {
-	
+
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
 	/** ===================================================================================== */ 
 
 	public List<Job> findLastLogs(Integer maxNumber) {
@@ -27,12 +27,23 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
 	}
 
 	/** ===================================================================================== */ 
-	
-	public List<Job> findByIPs(List<String> listIPs) {
+
+	public List<Job> findByIPs(List<String> listIPs, Integer maxNumber) {
 		Criteria criteria = Criteria.where("single_ip").in(listIPs);
-		return mongoTemplate.find(Query.query(criteria), Job.class);
+		Query query = Query.query(criteria);
+		if (maxNumber!=null) {
+			query.limit(maxNumber);
+		}
+		query.with(new Sort(Sort.Direction.DESC, "lastActivity"));
+		return mongoTemplate.find(query, Job.class);
 	}
 
-	
+	/** ===================================================================================== */ 
+
+	public List<Job> findByIPs(List<String> listIPs) {
+		return this.findByIPs(listIPs, null);
+	}
+
+
 	/** ===================================================================================== */ 
 }

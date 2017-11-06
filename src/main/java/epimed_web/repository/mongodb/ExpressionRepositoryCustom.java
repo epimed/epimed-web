@@ -2,7 +2,7 @@ package epimed_web.repository.mongodb;
 
 import java.util.List;
 
-import epimed_web.entity.mongodb.Expression;
+import epimed_web.entity.mongodb.genes.Expression;
 
 public interface ExpressionRepositoryCustom {
 

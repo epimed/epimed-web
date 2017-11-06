@@ -14,6 +14,7 @@ ClinicalDataController.java * EpiMed - Information system for bioinformatics dev
 package epimed_web.controller.clinical;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import epimed_web.entity.mongodb.Series;
-import epimed_web.repository.mongodb.SampleRepository;
-import epimed_web.repository.mongodb.SeriesRepository;
+import epimed_web.entity.mongodb.experiments.Series;
+import epimed_web.repository.mongodb.experiments.SampleRepository;
+import epimed_web.repository.mongodb.experiments.SeriesRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.util.FileService;
 import epimed_web.service.util.FormatService;
@@ -53,12 +54,22 @@ public class SeriesController extends ApplicationLogger {
 	@Autowired
 	private SampleRepository sampleRepository;
 
+
 	/** ====================================================================================== */
 
 	@RequestMapping(value = {"/series", "expgroup"}, method = RequestMethod.GET)
-	public String downloadExpGroupGet(Model model, HttpServletRequest request) throws IOException {
+	public String downloadExpGroupGet(Model model,
+			@RequestParam(value = "text", required = false) String text
+			) throws IOException {
 
-		List<Series> listSeries = seriesRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
+		List<Series> listSeries = new ArrayList<Series>();
+		if (text!=null && !text.isEmpty()) {
+			listSeries = seriesRepository.findByText(text);
+		} 
+		else {
+			listSeries = seriesRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
+		}
+		model.addAttribute("text", text);
 		model.addAttribute("listSeries", listSeries);
 
 		return "series/list";
@@ -85,7 +96,7 @@ public class SeriesController extends ApplicationLogger {
 			List<Document> listExpGroup = sampleRepository.findSamples(listIdSeries, "exp_group"); 
 			List<String> headerExpGroup = formatService.extractHeader(listExpGroup, "exp_group");
 			List<Object> dataExpGroup = formatService.extractData(listExpGroup, headerExpGroup, "exp_group");
-			fileService.addSheet(workbook, "mandatory parameters", headerExpGroup, dataExpGroup);
+			fileService.addSheet(workbook, "standard exp_group", headerExpGroup, dataExpGroup);
 
 
 			// ===== Add supplementary parameters ======
@@ -93,7 +104,7 @@ public class SeriesController extends ApplicationLogger {
 			List<Document> listParam = sampleRepository.findSamples(listIdSeries, "parameters"); 
 			List<String> headerParam = formatService.extractHeader(listParam, "parameters");
 			List<Object> dataParam = formatService.extractData(listParam, headerParam, "parameters");
-			fileService.addSheet(workbook, "supplementary parameters", headerParam, dataParam);
+			fileService.addSheet(workbook, "original parameters", headerParam, dataParam);
 
 			// ===== File generation =====
 

@@ -3,7 +3,6 @@ package epimed_web.entity.mongodb.admin;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class User {
 	
 	@Id
-	private ObjectId id;
+	private String id;
 	
 	@Field("first_name")
 	private String firstName;
@@ -22,9 +21,9 @@ public class User {
 	@Field("last_name")
 	private String lastName;
 	
-	private String organization;
-	Role role = Role.ROLE_USER;
-	List<String> ip = new ArrayList<String>();
+	private String organization="IAB";
+	private Role role = Role.ROLE_USER;
+	private List<String> ip = new ArrayList<String>();
 	
 
 	public User() {
@@ -32,8 +31,9 @@ public class User {
 	}
 
 
-	public User(String firstName, String lastName, String organization, Role role, List<String> ip) {
+	public User(String id, String firstName, String lastName, String organization, Role role, List<String> ip) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.organization = organization;
@@ -42,12 +42,12 @@ public class User {
 	}
 
 
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
 
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -103,9 +103,37 @@ public class User {
 
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+
+	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lastName=" + lastName + ", organization="
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", organization="
 				+ organization + ", role=" + role + ", ip=" + ip + "]";
 	}
+
 
 }

@@ -31,18 +31,21 @@
 				</div>
 
 				<!-- IP -->
-				<div class="col-md-3">${log.ip}</div>
+				<div class="col-md-3"><a href="${pageContext.request.contextPath}/admin/log/${log.singleIp}/">${log.ip}</a></div>
 
 				<!-- User -->
 				<div class="col-md-2">
-					<c:if test="${not empty log.user}">${log.user.firstName} ${log.user.lastName}</c:if>
+					<c:if test="${not empty log.user}"><a href="${pageContext.request.contextPath}/admin/log/${log.user.id}">${log.user.firstName} ${log.user.lastName}</a></c:if>
 				</div>
 
 				<!-- Method -->
 				<div class="col-md-1">${log.method}</div>
 
 				<!-- URL -->
-				<div class="col-md-4">${log.url}</div>
+				<div class="col-md-3">${log.url}</div>
+				
+				<!-- URL -->
+				<div class="col-md-1"><a href="${pageContext.request.contextPath}/admin/log/delete/${log.id}">delete</a></div>
 
 			</div>
 

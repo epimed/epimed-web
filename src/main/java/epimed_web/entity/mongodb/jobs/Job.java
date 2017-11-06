@@ -27,7 +27,11 @@ public class Job {
 	private Integer current;
 	private JobType type;
 	private List<String> elements;
+	
+	@Field("main_object")
+	private Object mainObject;
 	private JobStatus status;
+	
 	private String comment;
 	private String ip;
 
@@ -100,6 +104,15 @@ public class Job {
 		this.elements = elements;
 	}
 
+
+	public Object getMainObject() {
+		return mainObject;
+	}
+
+	public void setMainObject(Object mainObject) {
+		this.mainObject = mainObject;
+	}
+
 	public JobStatus getStatus() {
 		return status;
 	}
@@ -161,11 +174,9 @@ public class Job {
 	@Override
 	public String toString() {
 		return "Job [id=" + id + ", submissionDate=" + submissionDate + ", lastActivity=" + lastActivity + ", total="
-				+ total + ", current=" + current + ", type=" + type + ", elements=" + elements + ", status=" + status
-				+ ", comment=" + comment + ", ip=" + ip + ", singleIp=" + singleIp + ", method=" + method + ", url="
-				+ url + "]";
+				+ total + ", current=" + current + ", type=" + type + ", elements=" + elements + ", mainObject="
+				+ mainObject + ", status=" + status + ", comment=" + comment + ", ip=" + ip + ", singleIp=" + singleIp
+				+ ", method=" + method + ", url=" + url + ", user=" + user + "]";
 	}
-
-
 
 }

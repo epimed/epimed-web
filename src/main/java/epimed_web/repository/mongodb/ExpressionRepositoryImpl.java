@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import epimed_web.entity.mongodb.Expression;
+import epimed_web.entity.mongodb.genes.Expression;
 
 @SuppressWarnings("unchecked")
 public class ExpressionRepositoryImpl implements ExpressionRepositoryCustom {

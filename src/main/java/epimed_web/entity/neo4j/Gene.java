@@ -1,6 +1,7 @@
 package epimed_web.entity.neo4j;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.neo4j.ogm.annotation.GraphId;
@@ -42,6 +43,9 @@ public class Gene {
 	private Gene currentGene;
 	
 	private String feature;
+	
+	// === Supplementary attributes to fill manually ===
+	private List<Probeset> probesets;
 	
 	public Gene() {
 		super();
@@ -177,6 +181,18 @@ public class Gene {
 		this.feature = feature;
 	}
 
+	
+	
+
+	public List<Probeset> getProbesets() {
+		return probesets;
+	}
+
+
+	public void setProbesets(List<Probeset> probesets) {
+		this.probesets = probesets;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -210,8 +226,10 @@ public class Gene {
 		return "Gene [graphId=" + graphId + ", uid=" + uid + ", geneSymbol=" + geneSymbol + ", title=" + title
 				+ ", chrom=" + chrom + ", location=" + location + ", type=" + type + ", status=" + status + ", taxId="
 				+ taxId + ", aliases=" + aliases + ", replacedBy=" + replacedBy + ", currentGene=" + currentGene
-				+ ", feature=" + feature + "]";
+				+ ", feature=" + feature + ", probesets=" + probesets + "]";
 	}
+
+	
 
 	
 }

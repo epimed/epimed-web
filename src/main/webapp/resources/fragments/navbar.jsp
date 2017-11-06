@@ -21,6 +21,7 @@
 					aria-expanded="false">Clinical data <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="${pageContext.request.contextPath}/series">Download experimental grouping</a></li>
+						<li><a href="${pageContext.request.contextPath}/series/add">Import a study from external database</a></li>
 						<li><a href="${pageContext.request.contextPath}/samples">Search for samples in the database</a></li>
 						<li><a href="${pageContext.request.contextPath}/updateExpgroup">Add annotations to experimental grouping</a></li>
 					</ul>
@@ -31,6 +32,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="${pageContext.request.contextPath}/genes/update">Update a list of gene symbols</a></li>
 						<li><a href="${pageContext.request.contextPath}/genes/probeset">Find probesets for a list of gene symbols</a></li>
+						<li><a href="${pageContext.request.contextPath}/genes/annotation">Tissue-specific genes</a></li>
 					</ul>
 				</li>
 				

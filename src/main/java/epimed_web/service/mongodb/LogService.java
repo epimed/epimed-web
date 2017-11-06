@@ -23,6 +23,8 @@ public class LogService {
 	@Autowired
 	public HttpServletRequest request;
 
+	@Autowired
+	public UserService userService;
 
 	/** ================================================================================= */
 
@@ -66,33 +68,15 @@ public class LogService {
 		Log log = new Log();
 		log.setLastActivity(new Date());
 		if (request!=null) {
-			log.setIp(this.getIp());
-			log.setSingleIp(this.getSingleIp());
+			log.setIp(userService.getIp());
+			log.setSingleIp(userService.getSingleIp());
 			log.setMethod(request.getMethod());
 			log.setRoute(request.getContextPath());
 			log.setUrl(request.getRequestURI());
 		}
 		return log;
 	}
-
-	/** ================================================================================= */
-
-	public String getIp() {
-		return request.getHeader("X-FORWARDED-FOR") != null ? request.getHeader("X-FORWARDED-FOR") : request.getRemoteAddr();
-	}
-	/** ====================================================================================== */
-
-	public String getSingleIp() {
-
-		String ipAddress = this.getIp();
-
-		String singleIp = ipAddress;
-		if (ipAddress!=null && !ipAddress.isEmpty()) {
-			singleIp = ipAddress.split("[,;\\p{Space}]")[0];
-		}
-
-		return singleIp;
-	}
+	
 
 	/** ====================================================================================== */
 
