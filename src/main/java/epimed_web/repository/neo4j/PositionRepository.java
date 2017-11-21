@@ -8,8 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import epimed_web.entity.neo4j.Position;
 
-public interface PositionRepository extends GraphRepository<Position>{
+public interface PositionRepository extends GraphRepository<Position> {
+	
+	@Query("MATCH (p:Position)-[]->(g:Gene) WHERE g.uid={idGene} AND {idAssembly} IN p.id_assemblies RETURN p ORDER BY p.chrom ASC, p.exon_count DESC")
+	public List<Position> findByIdGeneAndIdAssembly(@Param("idGene") Integer idGene, @Param("idAssembly") String idAssembly);
 
-	@Query("MATCH (p:Position)-[*1..2]->(g:Gene) WHERE g.uid={idGene} AND p.id_assembly={idAssembly} RETURN p")
-	public List<Position> findPositions(@Param("idGene") Integer idGene, @Param("idAssembly") String idAssembly);
 }

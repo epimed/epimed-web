@@ -110,7 +110,8 @@ public class GeneService extends ApplicationLogger {
 		}
 
 		// === Search by position ===
-		genes = geneRepository.findCurrentByPositionAndTaxid(symbol, taxid);
+		String uidPosition = symbol + "." + taxid;
+		genes = geneRepository.findCurrentByUidPositionAndTaxid(uidPosition, taxid);
 		if (genes!=null && !genes.isEmpty()) {
 			ajaxForm.setListGenes(genes);
 			ajaxForm.setSource("EpiMed POSITION");

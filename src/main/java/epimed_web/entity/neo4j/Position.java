@@ -1,5 +1,8 @@
 package epimed_web.entity.neo4j;
 
+import java.util.List;
+import java.util.Set;
+
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -17,11 +20,17 @@ public class Position {
 	@Index
 	private String uid;
 	
-	@Property(name="id_assembly")
-	private String idAssembly;
+	@Property(name="id_position")
+	private String idPosition;
+	
+	@Property(name="tax_id")
+	private Integer taxId;
+	
+	@Property(name="id_assemblies")
+	private Set<String> idAssemblies;
 	
 	@Property(name="id_gene")
-	private Integer idGene;
+	private Long idGene;
 	
 	private String chrom;
 	
@@ -40,7 +49,16 @@ public class Position {
 	private Long cdsEnd;
 	
 	@Property(name="exon_count")
-	private Integer exonCount;
+	private Long exonCount;
+	
+	@Property(name="exon_starts")
+	private List<Long> exonStarts;
+	
+	@Property(name="exon_ends")
+	private List<Long> exonEnds;
+	
+	@Property(name="id_ensembl")
+	private String idEnsembl;
 	
 	private DataSource source = DataSource.ucsc;
 	
@@ -48,7 +66,7 @@ public class Position {
 	private  Gene gene;
 	
 	@Relationship(type="BELONGS_TO", direction=Relationship.OUTGOING)
-	private  Assembly assembly;
+	private  List<Assembly> assemblies;
 
 	public Position() {
 		super();
@@ -70,19 +88,35 @@ public class Position {
 		this.uid = uid;
 	}
 
-	public String getIdAssembly() {
-		return idAssembly;
+	public String getIdPosition() {
+		return idPosition;
 	}
 
-	public void setIdAssembly(String idAssembly) {
-		this.idAssembly = idAssembly;
+	public void setIdPosition(String idPosition) {
+		this.idPosition = idPosition;
 	}
 
-	public Integer getIdGene() {
+	public Integer getTaxId() {
+		return taxId;
+	}
+
+	public void setTaxId(Integer taxId) {
+		this.taxId = taxId;
+	}
+
+	public Set<String> getIdAssemblies() {
+		return idAssemblies;
+	}
+
+	public void setIdAssemblies(Set<String> idAssemblies) {
+		this.idAssemblies = idAssemblies;
+	}
+
+	public Long getIdGene() {
 		return idGene;
 	}
 
-	public void setIdGene(Integer idGene) {
+	public void setIdGene(Long idGene) {
 		this.idGene = idGene;
 	}
 
@@ -134,25 +168,37 @@ public class Position {
 		this.cdsEnd = cdsEnd;
 	}
 
-	public Integer getExonCount() {
+	public Long getExonCount() {
 		return exonCount;
 	}
 
-	public void setExonCount(Integer exonCount) {
+	public void setExonCount(Long exonCount) {
 		this.exonCount = exonCount;
 	}
-	
-	
 
-	public Gene getGene() {
-		return gene;
+	public List<Long> getExonStarts() {
+		return exonStarts;
 	}
 
-	public void setGene(Gene gene) {
-		this.gene = gene;
+	public void setExonStarts(List<Long> exonStarts) {
+		this.exonStarts = exonStarts;
 	}
-	
-	
+
+	public List<Long> getExonEnds() {
+		return exonEnds;
+	}
+
+	public void setExonEnds(List<Long> exonEnds) {
+		this.exonEnds = exonEnds;
+	}
+
+	public String getIdEnsembl() {
+		return idEnsembl;
+	}
+
+	public void setIdEnsembl(String idEnsembl) {
+		this.idEnsembl = idEnsembl;
+	}
 
 	public DataSource getSource() {
 		return source;
@@ -162,12 +208,20 @@ public class Position {
 		this.source = source;
 	}
 
-	public Assembly getAssembly() {
-		return assembly;
+	public Gene getGene() {
+		return gene;
 	}
 
-	public void setAssembly(Assembly assembly) {
-		this.assembly = assembly;
+	public void setGene(Gene gene) {
+		this.gene = gene;
+	}
+
+	public List<Assembly> getAssemblies() {
+		return assemblies;
+	}
+
+	public void setAssemblies(List<Assembly> assemblies) {
+		this.assemblies = assemblies;
 	}
 
 	@Override
@@ -197,12 +251,11 @@ public class Position {
 
 	@Override
 	public String toString() {
-		return "Position [graphId=" + graphId + ", uid=" + uid + ", idAssembly=" + idAssembly + ", idGene=" + idGene
-				+ ", chrom=" + chrom + ", strand=" + strand + ", txStart=" + txStart + ", txEnd=" + txEnd
-				+ ", cdsStart=" + cdsStart + ", cdsEnd=" + cdsEnd + ", exonCount=" + exonCount + ", source=" + source
-				+ ", gene=" + gene + ", assembly=" + assembly + "]";
+		return "Position [graphId=" + graphId + ", uid=" + uid + ", idPosition=" + idPosition + ", taxId=" + taxId
+				+ ", idAssemblies=" + idAssemblies + ", idGene=" + idGene + ", chrom=" + chrom + ", strand=" + strand
+				+ ", txStart=" + txStart + ", txEnd=" + txEnd + ", cdsStart=" + cdsStart + ", cdsEnd=" + cdsEnd
+				+ ", exonCount=" + exonCount + ", exonStarts=" + exonStarts + ", exonEnds=" + exonEnds + ", idEnsembl="
+				+ idEnsembl + ", source=" + source + "]";
 	}
 
-	
-	
 }

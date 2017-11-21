@@ -97,6 +97,7 @@ public class ApiRestGeneController extends ApplicationLogger {
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 			fileService.writeExcelFile(response.getOutputStream(), header, data);
 		}
+		
 		else {
 			fileName =  fileService.generateFileName("EpiMed_genes" + suffixAnnotations, "csv");
 			logger.debug("Generated file name {}", fileName);
@@ -104,6 +105,7 @@ public class ApiRestGeneController extends ApplicationLogger {
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 			fileService.writeCsvFile(response, header, data);
 		}
+			
 		return null;
 
 	}

@@ -49,6 +49,13 @@ df = read.csv2(url, header=TRUE, sep=";")
 </code></pre>
 		</div>
 
+		<p>For gene positions, it is possible to organize columns accordingly to standard BED format. Just add <code>format=bed</code> to your request: </p>
+		
+		<div>
+<pre><code>url = "${globalApplicationRootUrl}/query/jobs?jobid=YOUR_JOB_ID&format=bed"
+df = read.csv2(url, header=TRUE, sep=";")
+</code></pre>
+		</div>
 
 	<h2>Query for tissue-specific genes</h2>
 	<p>To query tissue-specific gene your need to know:</p>

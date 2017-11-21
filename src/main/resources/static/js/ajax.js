@@ -2,7 +2,7 @@
  * Custom Javascript functions
  */
 
-var url, listElements, totalElements, totalUploaded, currentIndex, taxid, jobid, idSelectedPlatform, jobtype, enableSubmitButtonAfterUpload;
+var url, listElements, totalElements, totalUploaded, currentIndex, taxid, idAssembly, positionType, jobid, idSelectedPlatform, jobtype, enableSubmitButtonAfterUpload;
 
 /** ========================================================================== */
 
@@ -104,6 +104,8 @@ function uploadNext() {
 	fd.append("totalElements", totalElements);
 	fd.append("currentIndex", currentIndex);
 	fd.append("idSelectedPlatform", idSelectedPlatform);
+	fd.append("idAssembly", idAssembly);
+	fd.append("positionType", positionType);
 	fd.append("jobtype", jobtype);
 	if (currentIndex==0) {
 		fd.append("listElements", listElements);

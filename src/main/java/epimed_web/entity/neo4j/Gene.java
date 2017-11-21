@@ -46,6 +46,7 @@ public class Gene {
 	
 	// === Supplementary attributes to fill manually ===
 	private List<Probeset> probesets;
+	private List<Position> positions;
 	
 	public Gene() {
 		super();
@@ -180,17 +181,22 @@ public class Gene {
 	public void setFeature(String feature) {
 		this.feature = feature;
 	}
-
 	
-	
-
 	public List<Probeset> getProbesets() {
 		return probesets;
 	}
 
-
 	public void setProbesets(List<Probeset> probesets) {
 		this.probesets = probesets;
+	}
+
+	public List<Position> getPositions() {
+		return positions;
+	}
+
+
+	public void setPositions(List<Position> positions) {
+		this.positions = positions;
 	}
 
 

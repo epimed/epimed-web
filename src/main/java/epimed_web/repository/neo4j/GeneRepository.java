@@ -35,7 +35,7 @@ public interface GeneRepository extends GraphRepository<Gene> {
 	public List<Gene> findCurrentByProteinSequenceAndTaxid(@Param("uidProteinSequence") String uidProteinSequence, @Param("taxid") Integer taxid);
 	
 	@Query("MATCH p=(n:Position {uid:{uidPosition}})-[*1..2]->(g:Gene) WHERE (all(rel in relationships(p) where type(rel) in ['LINKS', 'REPLACED_BY'])) AND g.tax_id={taxid} AND NOT g.status=\"replaced\" RETURN distinct g")
-	public List<Gene> findCurrentByPositionAndTaxid(@Param("uidPosition") String uidPosition, @Param("taxid") Integer taxid);
+	public List<Gene> findCurrentByUidPositionAndTaxid(@Param("uidPosition") String uidPosition, @Param("taxid") Integer taxid);
 	
 	@Query("MATCH (g:Gene)-[r:BELONGS_TO]->(a:Annotation) WHERE g.tax_id={taxid} AND a.source={source} RETURN count(g)")
 	public Long countByAnnotation(@Param("source") DataSource source, @Param("taxid") Integer taxid);

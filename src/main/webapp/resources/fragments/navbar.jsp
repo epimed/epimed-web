@@ -32,6 +32,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="${pageContext.request.contextPath}/genes/update">Update a list of gene symbols</a></li>
 						<li><a href="${pageContext.request.contextPath}/genes/probeset">Find probesets for a list of gene symbols</a></li>
+						<li><a href="${pageContext.request.contextPath}/genes/position">Find positions for a list of gene symbols</a></li>
 						<li><a href="${pageContext.request.contextPath}/genes/annotation">Tissue-specific genes</a></li>
 					</ul>
 				</li>

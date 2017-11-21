@@ -20,6 +20,7 @@ import epimed_web.service.mongodb.JobElementService;
 import epimed_web.service.mongodb.JobService;
 import epimed_web.service.mongodb.LogService;
 import epimed_web.service.neo4j.GeneService;
+import epimed_web.service.neo4j.PositionService;
 import epimed_web.service.neo4j.ProbesetService;
 import epimed_web.service.util.FormatService;
 
@@ -35,6 +36,9 @@ public class AjaxGeneController extends ApplicationLogger {
 
 	@Autowired
 	private ProbesetService probesetService;
+
+	@Autowired
+	private PositionService positionService;
 
 	@Autowired
 	private JobService jobService;
@@ -58,6 +62,8 @@ public class AjaxGeneController extends ApplicationLogger {
 			@RequestParam(value = "totalElements", required = false) Integer totalElements,
 			@RequestParam(value = "listElements", required = false) List<String> listElements,
 			@RequestParam(value = "idSelectedPlatform", required = false) String idSelectedPlatform,
+			@RequestParam(value = "idAssembly", required = false) String idAssembly,
+			@RequestParam(value = "positionType", required = false) String positionType,
 			@RequestParam(value = "jobtype", required = false) JobType jobtype
 			) {
 
@@ -104,24 +110,22 @@ public class AjaxGeneController extends ApplicationLogger {
 				if (jobtype.equals(JobType.probeset)) {
 					ajaxForm.setParameter(idSelectedPlatform);
 				}
-
-				// === Check if recent job elements already exists for this symbol in the database ===
-				boolean isFound = false;
-				// boolean isFound = jobElementService.updateJobElements(jobid, processedSymbol, taxid, 7, ajaxForm);
-				// ajaxForm.setSuccess(isFound);
-
-				// === If not found, search result for current symbol ===
-				if (!isFound) {
-					boolean success = geneService.populateBySymbolAndTaxid(ajaxForm);
-
-					if (jobtype.equals(JobType.probeset)) {
-						// Search for probesets
-						probesetService.populate(ajaxForm);
-					}
-
-					ajaxForm.setSuccess(success);
-					jobElementService.createJobElments(jobid, processedSymbol, taxid, 7, ajaxForm);
+				if (jobtype.equals(JobType.position)) {
+					ajaxForm.setParameter(idAssembly + "_" + positionType);
 				}
+
+				boolean success = geneService.populateBySymbolAndTaxid(ajaxForm);
+				
+				if (jobtype.equals(JobType.probeset)) {
+					probesetService.populate(ajaxForm);
+				}
+				if (jobtype.equals(JobType.position)) {
+					positionService.populate(ajaxForm);
+				}
+
+				ajaxForm.setSuccess(success);
+				jobElementService.createJobElments(jobid, processedSymbol, taxid, 7, ajaxForm);
+
 
 				// === Job terminated ===
 				if (currentIndex!=null && currentIndex.equals(totalElements-1)) {

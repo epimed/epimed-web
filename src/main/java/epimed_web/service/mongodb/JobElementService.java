@@ -14,6 +14,7 @@ import epimed_web.entity.mongodb.jobs.JobElement;
 import epimed_web.entity.mongodb.jobs.JobResult;
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.entity.neo4j.Gene;
+import epimed_web.entity.neo4j.Position;
 import epimed_web.entity.neo4j.Probeset;
 import epimed_web.form.AjaxForm;
 import epimed_web.repository.mongodb.jobs.JobElementRepository;
@@ -78,9 +79,97 @@ public class JobElementService extends ApplicationLogger {
 			this.createProbesetJobElements(jobid, element, ajaxForm);
 		}
 
+		if (type.equals(JobType.position)) {
+			this.createPositionJobElements(jobid, element, ajaxForm);
+		}
+
 
 		return true;
 	}
+
+	/** ================================================================================= */
+
+	public void createPositionJobElements(String jobid, String element, AjaxForm ajaxForm) {
+
+		String parameter = ajaxForm.getParameter();
+
+		if (ajaxForm.getListGenes()!=null && !ajaxForm.getListGenes().isEmpty()) {
+
+			for (Gene gene: ajaxForm.getListGenes()) {
+
+				if (gene.getPositions()==null || gene.getPositions().isEmpty()) {
+
+					JobElement jobElement = this.createDefaultJobElement(jobid, element, ajaxForm);
+					jobElement.setType(JobType.position);
+
+					JobResult result = new JobResult();
+					result.append("your_input", element);
+
+					// Specific
+					result.append("tax_id",ajaxForm.getTaxid());
+					result.append("entrez", gene.getUid());
+					result.append("gene_symbol",gene.getGeneSymbol());
+					result.append("title", gene.getTitle());
+					result.append("location", gene.getLocation());
+					result.append("chrom",gene.getChrom());
+					result.append("status", gene.getStatus().name());
+					result.append("feature", gene.getFeature());
+					result.append("aliases", gene.getAliases()==null ? null : gene.getAliases());
+					result.append("database", ajaxForm.getSource());
+
+					jobElement.setResult(result);
+					jobElementRepository.save(jobElement);
+
+				}
+				else {
+
+					for (Position position: gene.getPositions()) {
+
+						JobElement jobElement = this.createDefaultJobElement(jobid, element, ajaxForm);
+						jobElement.setType(JobType.position);
+
+						JobResult result = new JobResult();
+						result.append("your_input", element);
+
+						// Specific
+						result.append("tax_id",ajaxForm.getTaxid());
+						result.append("entrez", gene.getUid());
+						result.append("gene_symbol",gene.getGeneSymbol());
+						result.append("title", gene.getTitle());
+						result.append("location", gene.getLocation());
+						result.append("chrom",gene.getChrom());
+						result.append("status", gene.getStatus().name());
+						result.append("feature", gene.getFeature());
+						result.append("aliases", gene.getAliases()==null ? null : gene.getAliases());
+						result.append("database", ajaxForm.getSource());
+
+						// Position
+						result.append("id_position", position.getIdPosition());
+						result.append("id_ensembl", position.getIdEnsembl());
+						result.append("id_assembly", parameter.split("_")[0]);
+						result.append("chrom_text", position.getChrom());
+						result.append("strand", position.getStrand());
+						result.append("tx_start", position.getTxStart());
+						result.append("tx_end", position.getTxEnd());
+						result.append("cds_start", position.getCdsStart());
+						result.append("cds_end", position.getCdsEnd());
+						result.append("exon_count", position.getExonCount());
+						result.append("exon_starts", position.getExonStarts());
+						result.append("exon_ends", position.getExonEnds());
+
+						jobElement.setResult(result);
+						jobElementRepository.save(jobElement);
+
+					}
+				}
+			}
+		}
+		else {
+			this.createEmptyJobElement(jobid, JobType.update, element, ajaxForm);
+		}
+
+	}
+
 
 
 	/** ================================================================================= */
@@ -107,7 +196,6 @@ public class JobElementService extends ApplicationLogger {
 
 					// Specific
 					result.append("tax_id",ajaxForm.getTaxid());
-
 					result.append("entrez", gene.getUid());
 					result.append("gene_symbol",gene.getGeneSymbol());
 					result.append("title", gene.getTitle());

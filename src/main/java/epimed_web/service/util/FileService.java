@@ -193,10 +193,17 @@ public class FileService extends ApplicationLogger {
 	}
 
 	/** ================================================================================= */
+	
+	public void writeCsvFile(HttpServletResponse response, List<String> header, List<Object> listData) {	
+		
+		this.writeCsvFile(response, header, listData, columnSeparator, "");
+	
+	}
+	
+	/** ================================================================================= */
 
-	public void writeCsvFile(HttpServletResponse response, List<String> header, List<Object> listData) {
-
-
+	public void writeCsvFile(HttpServletResponse response, List<String> header, List<Object> listData, String separator, String blankSymbol) {
+		
 		try {
 
 			PrintWriter writer = response.getWriter();
@@ -204,9 +211,9 @@ public class FileService extends ApplicationLogger {
 			// === Header ===
 			if (header!=null) {
 				for (int i=0; i<header.size(); i++) {
-					writer.append(header.get(i)!=null ? header.get(i).replaceAll("[\\p{Punct}\\p{Space}*]", "_").toLowerCase() : "");
+					writer.append(header.get(i)!=null ? header.get(i).replaceAll("[\\p{Punct}\\p{Space}*]", "_").toLowerCase() : blankSymbol);
 					if (i<(header.size()-1)) {
-						writer.append(columnSeparator);
+						writer.append(separator);
 					}
 				}
 				writer.append(lineSeparator);
@@ -218,9 +225,9 @@ public class FileService extends ApplicationLogger {
 				for ( Iterator<Object> iterator = listData.iterator(); iterator.hasNext(); ) {
 					Object data[] = (Object[]) iterator.next();
 					for (int j=0; j<data.length; j++) {
-						writer.append(data[j]!=null ? data[j].toString().replaceAll(columnSeparator, "_") : "");
+						writer.append(data[j]!=null ? data[j].toString().replaceAll(separator, "_") : blankSymbol);
 						if (j<(data.length-1)) {
-							writer.append(columnSeparator);
+							writer.append(separator);
 						}
 					}
 					writer.append(lineSeparator);
