@@ -40,7 +40,7 @@ public class MailService {
 
 	public void sendRequestByMail(String requestType, Job job) {
 
-		String mailSubject = "You have a new request";
+		String mailSubject = "You have a new request " + job.getId();
 
 		User user = userService.getUser();
 
@@ -66,9 +66,13 @@ public class MailService {
 	
 	/** ====================================================================================== */
 
-	public void sendRequestByMail(String requestType, String database, String idSeries, String [] elements) {
+	public void sendRequestByMail(String requestType, String database, String idSeries, String [] elements, String jobid) {
 
 		String mailSubject = "You have a new request";
+		
+		if (jobid!=null) {
+			mailSubject = mailSubject + " " + jobid;
+		}
 
 		User user = userService.getUser();
 
@@ -80,6 +84,7 @@ public class MailService {
 
 		String mailText = ""
 				+ "Request type = " + requestType + "\n\n"
+				+ "Job ID = " + jobid + "\n\n"
 				+ "External database = " + database + "\n\n"
 				+ "Accession ID = " + idSeries + "\n\n"
 				+ "Recognized accession ID elements = " + Arrays.toString(elements) + "\n\n"

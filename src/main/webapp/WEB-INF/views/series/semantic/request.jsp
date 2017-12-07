@@ -23,7 +23,7 @@
 		<p style="margin-bottom: 0.5cm;"></p>
 
 		<div class="panel panel-success">
-			<div class="panel-heading">New request</div>
+			<div class="panel-heading">New request ${jobid}</div>
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-2">Database</div>

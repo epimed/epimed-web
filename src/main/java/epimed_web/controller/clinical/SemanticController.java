@@ -204,8 +204,10 @@ public class SemanticController extends ApplicationLogger {
 		
 		String jobid = jobService.createJob(JobType.DATA_REQUEST, Arrays.asList(elements), properties);
 		
-		// mailService.sendRequestByMail(type, database, idSeries, elements);
+		mailService.sendRequestByMail(type, database, idSeries, elements, jobid);
 
+		model.addAttribute("jobid", jobid);
+		
 		return "series/semantic/request";
 
 	}

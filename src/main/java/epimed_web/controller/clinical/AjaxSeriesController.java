@@ -91,7 +91,7 @@ public class AjaxSeriesController extends ApplicationLogger {
 				job.setType(JobType.DATA_REQUEST);
 				jobService.save(job);
 
-				// mailService.sendRequestByMail("analyse", job);
+				mailService.sendRequestByMail("analyse", job);
 				
 				// === Check platforms ===
 				platformService.createPlatforms(series.getPlatforms());

@@ -46,7 +46,7 @@
 
 
 		<form:form method="post" action="updateExpgroup"
-			commandName="fileUpload" enctype="multipart/form-data">
+			modelAttribute="fileUpload" enctype="multipart/form-data">
 
 			<div>
 				<label for="file" class="btn btn-primary">Upload file</label> <input
@@ -76,7 +76,7 @@
 			<p class="lead">Please select the annotations to load in the
 				database:</p>
 
-			<form:form method="POST" commandName="form" action="importExpgroup">
+			<form:form method="POST" modelAttribute="form" action="importExpgroup">
 
 				<c:forEach var="annotation" items="${listAnnotations}">
 					<div class="checkbox">

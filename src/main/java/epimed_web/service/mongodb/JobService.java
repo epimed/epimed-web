@@ -30,7 +30,7 @@ public class JobService extends ApplicationLogger {
 
 	/** ================================================================================= */
 
-	private String generateUniqueJobId(Date currentDate) {
+	public String generateUniqueJobId(Date currentDate) {
 		Random random = new Random();
 		String jobid = dateFormat.format(currentDate) + "R" + random.nextInt(1000);
 

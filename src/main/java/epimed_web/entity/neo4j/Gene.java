@@ -44,6 +44,12 @@ public class Gene {
 	
 	private String feature;
 	
+	@Property(name="modification_date")
+	private String modificationDate;
+	
+	@Property(name="last_update")
+	private String lastUpdate;
+	
 	// === Supplementary attributes to fill manually ===
 	private List<Probeset> probesets;
 	private List<Position> positions;
@@ -182,6 +188,27 @@ public class Gene {
 		this.feature = feature;
 	}
 	
+	
+	public String getModificationDate() {
+		return modificationDate;
+	}
+
+
+	public void setModificationDate(String modificationDate) {
+		this.modificationDate = modificationDate;
+	}
+
+
+	public String getLastUpdate() {
+		return lastUpdate;
+	}
+
+
+	public void setLastUpdate(String lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+
 	public List<Probeset> getProbesets() {
 		return probesets;
 	}

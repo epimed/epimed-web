@@ -1,5 +1,5 @@
 <form:form class="form-inline pull-right" method="GET"
-	commandName="form" action="${pageContext.request.contextPath}/series">
+	modelAttribute="form" action="${pageContext.request.contextPath}/series">
 
 	<div class="form-group">
 		<input type="text" class="form-control" name="text" id="text"

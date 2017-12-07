@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -71,6 +72,10 @@ public class JobController extends ApplicationLogger {
 		JobHeader jobHeader = jobHeaderRepository.findOne(idHeader);
 
 		if (jobHeader==null) {
+			jobHeader = jobHeaderRepository.findOne(jobtype.name());
+		}
+		
+		if (jobHeader==null) {
 			throw new Exception("No header found for job type " + jobtype + " (jobid=" + jobid + ")");
 		}
 		List<String> header = jobHeader.getHeader();
@@ -114,6 +119,7 @@ public class JobController extends ApplicationLogger {
 
 	}
 
+
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/query/jobs") 
@@ -122,6 +128,15 @@ public class JobController extends ApplicationLogger {
 			@RequestParam(value = "format", defaultValue="csv") String format
 			){
 		return "redirect:/job/download?jobid=" + jobid + "&format=" + format + "&querySource=api";
+	}
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/query/jobstatus/{jobid}") 
+	public String queryJobStatusWithId (
+			@PathVariable String jobid
+			){
+		return "redirect:/query/jobstatus?jobid=" + jobid ;
 	}
 
 	/** ====================================================================================== */

@@ -37,7 +37,7 @@
 			</c:if>
 		</p>
 
-		<form:form method="POST" commandName="form" action="series">
+		<form:form method="POST" modelAttribute="form" action="series">
 
 
 			<c:forEach var="series" items="${listSeries}">

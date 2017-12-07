@@ -72,12 +72,22 @@ public class ApiDocController extends ApplicationLogger {
 
 	/** ====================================================================================== */
 
-	@RequestMapping(value = "/apiQueryJobs", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiQueryGenes", method = RequestMethod.GET)
 	public String apiQueryJobs (
 			HttpServletRequest request
 			) throws IOException {
 
-		return "api/apiQueryJobs";
+		return "api/apiQueryGenes";
+	}
+	
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/apiQueryTissueSpecificGenes", method = RequestMethod.GET)
+	public String apiQueryTissueSpecificGenes (
+			HttpServletRequest request
+			) throws IOException {
+
+		return "api/apiQueryTissueSpecificGenes";
 	}
 
 	/** ====================================================================================== */

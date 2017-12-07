@@ -45,7 +45,8 @@
 						<li><a href="${pageContext.request.contextPath}/apiQuerySamples">API query for samples</a></li>
 						<li><a href="${pageContext.request.contextPath}/apiQuerySeries">API query for series</a></li>
 						<li><a href="${pageContext.request.contextPath}/apiQueryPlatforms">API query for platforms</a></li>
-						<li><a href="${pageContext.request.contextPath}/apiQueryJobs">API query for gene annotations</a></li>
+						<li><a href="${pageContext.request.contextPath}/apiQueryGenes">API query for gene annotations</a></li>
+						<li><a href="${pageContext.request.contextPath}/apiQueryTissueSpecificGenes">API query for tissue-specific genes</a></li>
 					</ul>
 				</li>
 				

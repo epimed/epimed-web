@@ -79,7 +79,6 @@ public class JobElementRepositoryImpl extends ApplicationLogger implements JobEl
 		Bson filters = Filters.in("jobs", jobid);
 		List<Document> list = mongoDatabase.getCollection(collectionName)
 				.find(filters)
-				.sort(Sorts.ascending("last_activity"))
 				.into(new ArrayList<Document>());
 
 		return list;
