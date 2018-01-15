@@ -124,7 +124,7 @@ public class AjaxGeneController extends ApplicationLogger {
 				}
 
 				ajaxForm.setSuccess(success);
-				jobElementService.createJobElments(jobid, processedSymbol, taxid, 7, ajaxForm);
+				jobElementService.createJobElments(jobid, processedSymbol, taxid, ajaxForm);
 
 
 				// === Job terminated ===

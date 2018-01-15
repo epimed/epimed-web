@@ -31,7 +31,7 @@ import epimed_web.service.log.ApplicationLogger;
 
 @Service
 public class FormatService extends ApplicationLogger {
-	
+
 	/** ================================================================================= */
 
 	public Integer convertStringToInteger (String text) {
@@ -119,9 +119,9 @@ public class FormatService extends ApplicationLogger {
 
 	public List<String> convertStringToList (String list) {
 		List<String> result = null;
-		
+
 		String [] array = this.convertStringToArray(list);
-		
+
 		try {
 			result = Arrays.asList(array);
 		}
@@ -131,7 +131,7 @@ public class FormatService extends ApplicationLogger {
 		return result;
 	}
 
-	
+
 	/** ================================================================================= */
 
 	public List<Object> convertHomogeneousMongoDocuments (List<Document> listDocuments) {
@@ -266,7 +266,7 @@ public class FormatService extends ApplicationLogger {
 
 	}
 
-	
+
 	/** ================================================================================= */
 
 	public Set<String> extractSampleHeader (List<Sample> listSamples, String rootName) {
@@ -277,19 +277,19 @@ public class FormatService extends ApplicationLogger {
 		}
 		return header;
 	}
-	
+
 	/** ================================================================================= */
-	
+
 	public List<Object> extractSampleData (List<Sample> listSamples, Collection<String> header, String rootName) {
-		
+
 		List<Object> data = new ArrayList<Object>();
-		
+
 		for (Sample sample : listSamples) {
-			
+
 			Document doc = rootName.equals("parameters") ? sample.getParameters() : sample.getExpGroup();
-			
+
 			Object [] dataLine = new Object [header.size()];
-			
+
 			int j=0;
 			for (String item : header) {
 				dataLine[j] = (Object) doc.get(item);
@@ -297,10 +297,10 @@ public class FormatService extends ApplicationLogger {
 			}
 			data.add(dataLine);
 		}
-		
+
 		return data;
 	}
-	
+
 	/** ================================================================================= */
 
 	public static String flattenToAscii(String string) {
@@ -319,6 +319,7 @@ public class FormatService extends ApplicationLogger {
 	public String normalize(String entry) {
 		return flattenToAscii(entry).replaceAll("[\\p{Punct}\\p{Space}*]", "_").toLowerCase();
 	}
+
 
 	/** ================================================================================= */
 

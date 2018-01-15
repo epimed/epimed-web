@@ -1,6 +1,7 @@
 package epimed_web.service.mongodb;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -90,15 +91,27 @@ public class JobService extends ApplicationLogger {
 		return jobid;
 	}
 
+
 	/** ================================================================================= */
 
 	public boolean updateJob(String jobid, Integer current, JobStatus jobStatus, String comment) {
 
-		if (jobid==null || jobid.isEmpty() || jobStatus==null) {
+		if (jobStatus==null) {
 			return false;
 		}
 
 		Job job = jobRepository.findOne(jobid);
+		return this.updateJob(job, current, jobStatus, comment);
+
+	}
+
+	/** ================================================================================= */
+
+	public boolean updateJob(Job job, Integer current, JobStatus jobStatus, String comment) {
+
+		if (jobStatus==null) {
+			return false;
+		}
 
 		if (job==null) {
 			return false;
@@ -115,6 +128,29 @@ public class JobService extends ApplicationLogger {
 
 	/** ================================================================================= */
 
+	public boolean updateJob(Job job, JobType jobType, JobStatus jobStatus, List<String> listElements, String comment) {
+
+		if (job==null || jobStatus==null || jobType==null) {
+			return false;
+		}
+
+
+		job.setLastActivity(new Date());
+		job.setType(jobType);
+		job.setStatus(jobStatus);
+		if (listElements!=null) {
+			job.setElements(listElements);
+			job.setTotal(listElements.size());
+		}
+		job.setComment(comment);
+
+		jobRepository.save(job);
+		return true;
+	}
+
+
+	/** ================================================================================= */
+
 	public void save(Job job) {
 		jobRepository.save(job);
 	}
@@ -125,6 +161,19 @@ public class JobService extends ApplicationLogger {
 	public Job findByJobid(String jobid) {
 		return jobRepository.findOne(jobid);
 	}
+
+	/** ================================================================================= */
+
+	public Job truncateListElements (Job job, int maxNbElements) {
+		if (job.getElements()!=null && job.getElements().size()>maxNbElements) {
+			List<String> truncatedListElements = new ArrayList<String>();
+			truncatedListElements.addAll(job.getElements().subList(0, maxNbElements));
+			truncatedListElements.add("...");
+			job.setElements(truncatedListElements);
+		}
+		return job;
+	}
+
 
 	/** ================================================================================= */
 

@@ -1,6 +1,5 @@
 package epimed_web.service.mongodb;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +54,7 @@ public class JobElementService extends ApplicationLogger {
 
 	/** ================================================================================= */
 
-	public boolean createJobElments(String jobid, String element, Integer taxid, int nbDaysExpiration, AjaxForm ajaxForm) {
+	public boolean createJobElments(String jobid, String element, Integer taxid, AjaxForm ajaxForm) {
 
 		JobType type = ajaxForm.getJobtype();
 
@@ -156,6 +155,8 @@ public class JobElementService extends ApplicationLogger {
 						result.append("exon_count", position.getExonCount());
 						result.append("exon_starts", position.getExonStarts());
 						result.append("exon_ends", position.getExonEnds());
+						result.append("canonical", position.getCanonical());
+						result.append("source", position.getSource());
 
 						jobElement.setResult(result);
 						jobElementRepository.save(jobElement);
@@ -321,42 +322,6 @@ public class JobElementService extends ApplicationLogger {
 		jobElementRepository.save(jobElement);
 	}
 
-
-	/** ================================================================================= */
-
-	@SuppressWarnings("unchecked")
-	public boolean updateJobElements(String jobid, String element, Integer taxid, int nbDaysExpiration, AjaxForm ajaxForm) {
-
-		JobType type = ajaxForm.getJobtype();
-
-		if (element==null || element.isEmpty() || type==null || jobid==null || jobid.isEmpty() || taxid==null) {
-			return false;
-		}
-
-		List<Document> docElements = jobElementRepository.findByElementTaxidTypeParameter(element, taxid, type, ajaxForm.getParameter(), nbDaysExpiration);
-
-		if (docElements!=null && !docElements.isEmpty()) {
-
-			// === Existing job elements are found in the database ===
-
-			for (Document docElement: docElements) {
-				List<String> jobs = docElement.get("jobs", ArrayList.class);
-				if (!jobs.contains(jobid)) {
-					jobs.add(jobid);
-				}
-				docElement.append("jobs", jobs);
-				docElement.put("last_activity", new Date());
-				jobElementRepository.updateJobElement(docElement);
-			}
-
-			ajaxForm.setNbGenes(docElements.size());
-			ajaxForm.setSource("EpiMed JOBCACHE");
-
-			return true;
-		}
-
-		return false;
-	}
 
 	/** ================================================================================= */
 

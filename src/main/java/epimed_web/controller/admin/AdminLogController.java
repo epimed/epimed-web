@@ -2,6 +2,8 @@ package epimed_web.controller.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +21,7 @@ import epimed_web.repository.mongodb.admin.LogRepository;
 import epimed_web.repository.mongodb.admin.UserRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.mongodb.UserService;
+import epimed_web.service.util.FormatService;
 
 @Controller
 @RequestMapping("/admin/log")
@@ -32,6 +35,9 @@ public class AdminLogController extends ApplicationLogger {
 
 	@Autowired
 	public LogRepository logRepository;
+
+	@Autowired
+	public FormatService formatService;
 
 
 	/** ====================================================================================== */
@@ -74,6 +80,7 @@ public class AdminLogController extends ApplicationLogger {
 
 	/** ====================================================================================== */
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = {"/", "", "/list"}, method = RequestMethod.GET)
 	public String logs (
 			Model model,
@@ -85,7 +92,7 @@ public class AdminLogController extends ApplicationLogger {
 			return "error";
 		}
 
-		List<Log> logs = logRepository.findLastLogs(300);
+		List<Log> logs = logRepository.findLastLogs(50);
 
 		for (Log log: logs) {
 			User user = userRepository.findByIp(log.getSingleIp());
@@ -95,7 +102,30 @@ public class AdminLogController extends ApplicationLogger {
 			else {
 				log.setUser(userService.generateDefaultUser());
 			}
+
+			// === Truncate a long list of elements ===
+			if (log.getParameter()!=null) {
+				Map<String, Object> parameter = (Map<String, Object>) log.getParameter();
+				Set<String> keyset = parameter.keySet();
+				if (keyset.contains("listElements")) {
+					List<String> list =   (List<String>) parameter.get("listElements");
+					
+					if (list!=null && !list.isEmpty()) {
+						List<String> listElements = formatService.convertStringToList(list.get(0));
+
+						if (listElements!=null && listElements.size()>10) {
+							List<String> truncatedListElements = new ArrayList<String>();
+							parameter.remove("listElements");
+							truncatedListElements.addAll(listElements.subList(0, 10));
+							truncatedListElements.add("...");
+							parameter.put("listElements", truncatedListElements);
+							log.setParameter(parameter);
+						}
+					}
+				}
+			}
 		}
+
 		model.addAttribute("logs", logs);
 
 		return "admin/log";

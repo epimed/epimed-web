@@ -91,7 +91,7 @@ public class AjaxSeriesController extends ApplicationLogger {
 				job.setType(JobType.DATA_REQUEST);
 				jobService.save(job);
 
-				mailService.sendRequestByMail("analyse", job);
+				mailService.sendRequestByMail("analysis", job);
 				
 				// === Check platforms ===
 				platformService.createPlatforms(series.getPlatforms());
@@ -107,13 +107,13 @@ public class AjaxSeriesController extends ApplicationLogger {
 			// === Progress ===
 			if (currentIndex!=null && currentIndex>0 && currentIndex<(totalElements-1)) {
 				logger.debug("*** Progress ***");
-				jobService.updateJob(jobid, currentIndex+1, JobStatus.progress, null);
+				jobService.updateJob(job, currentIndex+1, JobStatus.progress, null);
 			}
 
 			// === Last request ===
 			if (currentIndex!=null && currentIndex.equals(totalElements-1)) {
 				logger.debug("*** Terminate ***");
-				jobService.updateJob(jobid, totalElements, JobStatus.success, null);
+				jobService.updateJob(job, totalElements, JobStatus.success, null);
 				logService.log("Job jobid=" + jobid + " is terminated");
 				series.setStatus(Status.imported);
 				seriesRepository.save(series);
@@ -127,7 +127,7 @@ public class AjaxSeriesController extends ApplicationLogger {
 			logger.debug("*** Error ***");
 			ajaxResponse.setSuccess(false);
 			ajaxResponse.setMessage("ERROR: " + e.getMessage());
-			jobService.updateJob(jobid, currentIndex+1, JobStatus.error, e.getMessage());
+			jobService.updateJob(job, currentIndex+1, JobStatus.error, e.getMessage());
 			logService.log("Job jobid=" + jobid + " has an error: " + e.getMessage());
 			series.setStatus(Status.error);
 			seriesRepository.save(series);

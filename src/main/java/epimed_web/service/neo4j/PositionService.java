@@ -27,13 +27,17 @@ public class PositionService extends ApplicationLogger {
 			String idAssembly = parts[0];
 			String positionType = parts[1];
 
-
 			for (Gene gene: ajaxForm.getListGenes()) {
 
 				List<Position> listPositions = positionRepository.findByIdGeneAndIdAssembly(gene.getUid(), idAssembly);
-				
+
 				if (positionType!=null && positionType.equals("unique") && listPositions!=null && !listPositions.isEmpty()) {
-					Position unique = this.findUniquePosition(listPositions, gene);
+
+					Position unique = positionRepository.findUniqueCanonical(gene.getUid(), idAssembly);
+					
+					if (unique==null) {
+						unique = this.selectUniquePosition(listPositions, gene);
+					}
 					listPositions.clear();
 					listPositions.add(unique);
 				}
@@ -53,7 +57,7 @@ public class PositionService extends ApplicationLogger {
 
 	/** =============================================================================== */
 
-	public Position findUniquePosition(List<Position> listPositions, Gene gene) {
+	public Position selectUniquePosition(List<Position> listPositions, Gene gene) {
 
 		Position unique = listPositions.get(0);
 		int i=0;

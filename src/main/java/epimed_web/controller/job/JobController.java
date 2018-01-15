@@ -1,5 +1,6 @@
 package epimed_web.controller.job;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import epimed_web.entity.mongodb.jobs.Job;
 import epimed_web.entity.mongodb.jobs.JobHeader;
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.repository.mongodb.jobs.JobHeaderRepository;
+import epimed_web.repository.mongodb.jobs.JobRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.mongodb.JobElementService;
 import epimed_web.service.mongodb.JobService;
@@ -33,6 +35,9 @@ public class JobController extends ApplicationLogger {
 
 	@Autowired
 	private JobService jobService;
+	
+	@Autowired
+	private JobRepository jobRepository;
 
 	@Autowired
 	private JobElementService jobElementService;
@@ -56,6 +61,15 @@ public class JobController extends ApplicationLogger {
 		Job job = jobService.findByJobid(jobid);
 		if (job==null) {
 			throw new Exception("Job " + jobid + " is not found in EpiMed database");
+		}
+		else {
+			// update nb of downloads
+			job.setLastDownload(new Date());
+			Integer nbDownloads = job.getNbDownloads();
+			if (nbDownloads==null) {nbDownloads=0;}
+			nbDownloads = nbDownloads + 1;
+			job.setNbDownloads(nbDownloads);
+			jobRepository.save(job);
 		}
 
 		// === Header for a job type ===

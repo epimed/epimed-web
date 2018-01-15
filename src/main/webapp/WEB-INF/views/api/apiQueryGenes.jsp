@@ -22,53 +22,65 @@
 
 		<h1>API query for gene annotations</h1>
 		
-		<h2>Submit a query from R code</h2>
-		
 		<p>You can perform all the queries available on this web site directly from your R code.</p>
+	
+		<h2>Step 1. Create a new job and obtain your Job ID</h2>
+		
+	<div>
+<pre><code>library(jsonlite)
+url = "${globalApplicationRootUrl}/query/jobid"
+jobid = fromJSON(url)
+</code></pre>
+		</div>
+		<p>Keep your Job ID (<code>jobid</code> variable).</p>
+		
+		<h2>Step 2. Submit a query</h2>
+		
+		<p> Possible query types: 
+			<ul>
+				<li>update: update a list of gene symbols</li>
+				<li>probeset: find probesets for a list of gene symbols</li>
+				<li>position: find positions for a list of gene symbols</li>
+			</ul>
+		</p> 
 		
 		<h3>Update a list of gene symbols</h3>
 		
-		<p>For this query your need to provide: symbols and taxid (use standard NCBI taxid). The query type is <b>update</b>. </p>
+		<p>For this query your need to provide: jobid (obtained in Step1), symbols and taxid (use standard NCBI taxid). The query type is <b>update</b>. </p>
 		
 		<div>
 <pre><code>library(httr)
 url = "${globalApplicationRootUrl}/query/genes/<b>update</b>"
-body = list(symbols="ATAD2, BRDT", taxid=9606)
-job = POST(url, body = body, encode = "form")
-# Job ID
-jobid = content(job)$jobid
+body = list(jobid=jobid, symbols="ATAD2, BRDT", taxid=9606)
+response = POST(url, body = body, encode = "form")
 </code></pre>
 		</div>
 		
 		<h3>Find probesets for a list of gene symbols</h3>
 		
-		<p>For this query your need to provide: symbols, platform and taxid (use standard NCBI taxid). The query type is <b>probeset</b>. </p>
+		<p>For this query your need to provide: jobid (obtained in Step1), symbols, platform and taxid (use standard NCBI taxid). The query type is <b>probeset</b>. </p>
 
 		<div>
 <pre><code>library(httr)
 url = "${globalApplicationRootUrl}/query/genes/<b>probeset</b>"
-body=list(symbols="ATAD2, BRDT", platform="GPL570", taxid=9606)
-job = POST(url, body = body, encode = "form")
-# Job ID
-jobid = content(job)$jobid
+body=list(jobid=jobid, symbols="ATAD2, BRDT", platform="GPL570", taxid=9606)
+response = POST(url, body = body, encode = "form")
 </code></pre>
 		</div>
 
 		<h3>Find positions for a list of gene symbols</h3>
 		
-		<p>For this query your need to provide: symbols, assembly, positionType ("unique" or "all") and taxid (use standard NCBI taxid). The query type is <b>position</b>. </p>
+		<p>For this query your need to provide: jobid (obtained in Step1), symbols, assembly, positionType ("unique" or "all") and taxid (use standard NCBI taxid). The query type is <b>position</b>. </p>
 
 		<div>
 <pre><code>library(httr)
 url = "${globalApplicationRootUrl}/query/genes/<b>position</b>"
-body=list(symbols="ATAD2, BRDT", assembly="GRCh38", positionType="unique", taxid=9606)
-job = POST(url, body = body, encode = "form")
-# Job ID
-jobid = content(job)$jobid
+body=list(jobid=jobid, symbols="ATAD2, BRDT", assembly="GRCh38", positionType="unique", taxid=9606)
+response = POST(url, body = body, encode = "form")
 </code></pre>
 		</div>
 		
-		<h3>Check the status of my query</h3>
+		<h2>Step 3. Check the status of a query</h2>
 		
 		<p>If your list of symbols is long, the query may take some time. You can check the status of your query with the following command.</p>
 		
@@ -108,8 +120,16 @@ job$status
     		</tr>
 		</table>
 		
+		<p>If you need to access symbols of the query, just add <code>extended=1</code> to the url.</p>
+		<div>
+<pre><code>url = "${globalApplicationRootUrl}/query/jobstatus?jobid=YOUR_JOB_ID&<b>extended=1</b>"
+job = fromJSON(url)
+# Symbols
+job$symbols
+</code></pre>
+		</div>		
 		
-		<h2>Get the result of a query with Job ID</h2>
+		<h2>Step 4. Get the result of a query</h2>
 
 		<p>
 			When you perform any search for gene annotations on this web site
@@ -118,11 +138,8 @@ job$status
 			The result of your request is stored in the database with your Job
 			ID. Thus, you can load it again by using your personal Job ID.
 		</p>
-
-		<h3>Where to find Job ID?</h3>
-		<p>Job ID is displayed on the page where you perform a search for
-			gene annotations.</p>
-		<p>If you submit a request via R code, your Job ID is available in <code>content(job)$jobid</code> variable.</p>
+		
+		<p>If you submit a request via R code, your Job ID is available in <code>jobid</code> variable (see Step 1).</p>
 
 		<h3>Query composition</h3>
 

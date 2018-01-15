@@ -10,7 +10,9 @@ import epimed_web.entity.neo4j.Position;
 
 public interface PositionRepository extends GraphRepository<Position> {
 	
-	@Query("MATCH (p:Position)-[]->(g:Gene) WHERE g.uid={idGene} AND {idAssembly} IN p.id_assemblies RETURN p ORDER BY p.chrom ASC, p.exon_count DESC")
+	@Query("MATCH (p:Position)-[]->(g:Gene) WHERE g.uid={idGene} AND ({idAssembly} IN p.id_assemblies) RETURN p ORDER BY p.source ASC, p.chrom ASC, p.exon_count DESC")
 	public List<Position> findByIdGeneAndIdAssembly(@Param("idGene") Integer idGene, @Param("idAssembly") String idAssembly);
 
+	@Query("MATCH (p:Position)-[]->(g:Gene) WHERE g.uid={idGene} AND ({idAssembly} IN p.id_assemblies) AND p.canonical=true RETURN p ORDER BY p.source ASC LIMIT 1")
+	public Position findUniqueCanonical(@Param("idGene") Integer idGene, @Param("idAssembly") String idAssembly);
 }

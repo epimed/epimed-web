@@ -16,7 +16,7 @@ public class Job {
 
 	@Id
 	private String id;
-
+	
 	@Field("submission_date")
 	private Date submissionDate;
 
@@ -27,11 +27,11 @@ public class Job {
 	private Integer current;
 	private JobType type;
 	private List<String> elements;
-	
+
 	@Field("main_object")
 	private Object mainObject;
 	private JobStatus status;
-	
+
 	private String comment;
 	private String ip;
 
@@ -41,7 +41,14 @@ public class Job {
 	private String method;
 	private String url;
 
-	// can be later used for dispalying
+	@Field("last_download")
+	private Date lastDownload;
+	
+	@Field("nb_downloads")
+	private Integer nbDownloads = 0;
+
+
+	// === Can be used later for displaying ===
 	private User user;
 
 	public Job() {
@@ -55,6 +62,7 @@ public class Job {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 
 	public Date getSubmissionDate() {
 		return submissionDate;
@@ -160,8 +168,22 @@ public class Job {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	
+
+	public Date getLastDownload() {
+		return lastDownload;
+	}
+
+	public void setLastDownload(Date lastDownload) {
+		this.lastDownload = lastDownload;
+	}
+
+	public Integer getNbDownloads() {
+		return nbDownloads;
+	}
+
+	public void setNbDownloads(Integer nbDownloads) {
+		this.nbDownloads = nbDownloads;
+	}
 
 	public User getUser() {
 		return user;

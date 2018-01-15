@@ -33,6 +33,9 @@ public class Gene {
 
 	@Property(name="tax_id")
 	private Integer taxId;
+	
+	@Property(name="id_ensembl")
+	private String idEnsembl;
 
 	private Set<String> aliases = new HashSet<String>();
 
@@ -147,6 +150,16 @@ public class Gene {
 	public void setTaxId(Integer taxId) {
 		this.taxId = taxId;
 	}
+	
+
+	public String getIdEnsembl() {
+		return idEnsembl;
+	}
+
+
+	public void setIdEnsembl(String idEnsembl) {
+		this.idEnsembl = idEnsembl;
+	}
 
 
 	public Set<String> getAliases() {
@@ -258,11 +271,9 @@ public class Gene {
 	public String toString() {
 		return "Gene [graphId=" + graphId + ", uid=" + uid + ", geneSymbol=" + geneSymbol + ", title=" + title
 				+ ", chrom=" + chrom + ", location=" + location + ", type=" + type + ", status=" + status + ", taxId="
-				+ taxId + ", aliases=" + aliases + ", replacedBy=" + replacedBy + ", currentGene=" + currentGene
-				+ ", feature=" + feature + ", probesets=" + probesets + "]";
+				+ taxId + ", idEnsembl=" + idEnsembl + ", aliases=" + aliases + ", replacedBy=" + replacedBy
+				+ ", feature=" + feature + ", modificationDate=" + modificationDate + ", lastUpdate=" + lastUpdate
+				+ "]";
 	}
-
-	
-
 	
 }

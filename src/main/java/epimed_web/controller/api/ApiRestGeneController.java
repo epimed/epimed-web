@@ -2,14 +2,13 @@ package epimed_web.controller.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +21,15 @@ import epimed_web.entity.mongodb.jobs.JobStatus;
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.entity.neo4j.Gene;
 import epimed_web.entity.neo4j.GeneStatus;
+import epimed_web.form.AjaxForm;
 import epimed_web.repository.mongodb.jobs.JobRepository;
 import epimed_web.repository.neo4j.GeneRepository;
 import epimed_web.service.log.ApplicationLogger;
+import epimed_web.service.mongodb.JobElementService;
 import epimed_web.service.mongodb.JobService;
-import epimed_web.service.mongodb.LogService;
-import epimed_web.service.thread.GeneQueryThread;
+import epimed_web.service.neo4j.GeneService;
+import epimed_web.service.neo4j.PositionService;
+import epimed_web.service.neo4j.ProbesetService;
 import epimed_web.service.util.FileService;
 import epimed_web.service.util.FormatService;
 
@@ -44,16 +46,23 @@ public class ApiRestGeneController extends ApplicationLogger {
 	private GeneRepository geneRepository;	
 
 	@Autowired
+	private GeneService geneService;
+
+	@Autowired
 	private JobService jobService;
 
 	@Autowired
-	private LogService logService;
+	private JobElementService jobElementService;
 
-	@Autowired
-	private GeneQueryThread geneQueryThread;	
 
 	@Autowired
 	private JobRepository jobRepository;
+
+	@Autowired
+	private ProbesetService probesetService;
+
+	@Autowired
+	private PositionService positionService;
 
 
 	/** ====================================================================================== */
@@ -140,7 +149,8 @@ public class ApiRestGeneController extends ApplicationLogger {
 
 	@RequestMapping(value = "/query/genes/{jobtypeString}", method = {RequestMethod.GET, RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> queryGenes (
+	@Async
+	public void queryGenes (
 			HttpServletRequest request,
 			@PathVariable String jobtypeString,
 			@RequestParam(value = "jobid", required = false) String jobid,
@@ -152,59 +162,102 @@ public class ApiRestGeneController extends ApplicationLogger {
 			) throws InterruptedException, IOException {
 
 		
-		// String jobid = "No job created. Check your query.";
-		
-		// === Job Type ===
-		
+		boolean validRequest = false;
 		JobType jobtype=null;
-		try {
-			jobtype = JobType.valueOf(jobtypeString);
-		}
-		catch (Exception e) {
-			jobid = jobid + " Wrong URL (" + jobtypeString+ ").";
-		}
-
+				
 		List<String> listElements = formatService.convertStringToList(symbols);
-		if (listElements==null || listElements.isEmpty()) {
-			jobid = jobid + " List of symbols is missing or empty.";
+		Job job = jobRepository.findOne(jobid);
+		
+		logger.debug("listElements={}", listElements);
+		logger.debug("job={}", job);
+		
+		if (jobid!=null
+				&& !jobid.isEmpty() 
+				&& taxid!=null
+				&& listElements!=null && !listElements.isEmpty()
+				&& job!=null && job.getType().equals(JobType.reserved)	
+				) {
+			
+			try {
+				jobtype = JobType.valueOf(jobtypeString);
+				validRequest = true;
+			}
+			catch (Exception e) {
+				validRequest = false;
+			}
+			
 		}
 		
+		
+		logger.debug("validRequest={}", validRequest);
+		
+		if (validRequest) {
 
-		if (jobtype!=null && listElements!=null && !listElements.isEmpty() && taxid!=null) {
+			try  {
+				
+				jobService.updateJob(job, jobtype, JobStatus.init, listElements, null);
 
-			jobid = jobService.createJob(jobtype, listElements, null);
-			logService.log("API REST. New job started with jobid=" + jobid + ", jobtype=" + jobtypeString);
+				
+				for (int i=0; i<listElements.size(); i++) {
 
-			// === Async thread ===
+					String symbol = listElements.get(i);
 
-			geneQueryThread.setJobid(jobid);
-			geneQueryThread.setJobtype(jobtype);
-			geneQueryThread.setTaxid(taxid);
-			geneQueryThread.setListElements(listElements);
-			geneQueryThread.setAssembly(assembly);
-			geneQueryThread.setPlatform(platform);
-			geneQueryThread.setPositionType(positionType);
-			Thread thread = new Thread(geneQueryThread);
-			thread.start();
+					logger.debug("Processing {}", symbol);
+
+					// === Update job status in progress ===
+					if (i==0 || (i+1)%100==0) {
+						logger.debug("*** Progress ***");
+						logger.debug("Processed " + (i+1) + " elements of " + listElements.size());
+						jobService.updateJob(job, i+1, JobStatus.progress, "Processed " + (i+1) + " elements of " + listElements.size());
+					}
+
+					// === Ajax form ===
+					AjaxForm ajaxForm = new AjaxForm();
+					ajaxForm.setSymbol(symbol);
+					ajaxForm.setTaxid(taxid);
+					ajaxForm.setJobtype(jobtype);
+					ajaxForm.setIdPlatform(platform);
+
+					// === Parameters ===
+					if (jobtype.equals(JobType.probeset)) {
+						ajaxForm.setParameter(platform);
+					}
+					if (jobtype.equals(JobType.position)) {
+						ajaxForm.setParameter(assembly + "_" + positionType);
+					}
+
+					boolean success = geneService.populateBySymbolAndTaxid(ajaxForm);
+
+
+					if (jobtype.equals(JobType.probeset)) {
+						probesetService.populate(ajaxForm);
+					}
+					if (jobtype.equals(JobType.position)) {
+						positionService.populate(ajaxForm);
+					}
+
+					ajaxForm.setSuccess(success);
+
+					jobElementService.createJobElments(jobid, symbol, taxid, ajaxForm);
+
+					// === Job terminated ===
+					if (i==(listElements.size()-1)) {
+						logger.debug("*** Job terminated ***");
+						jobService.updateJob(job, i+1, JobStatus.success, null);
+					}
+
+				}
+
+			}
+			catch (Exception e) {
+				logger.debug("*** Error ***");
+				jobService.updateJob(job, 0, JobStatus.error, e.getMessage());
+				e.printStackTrace();
+			}
 		}
-
-
-		// === Return job id and status ===
-
-		Map<String, Object> mapJob = new HashMap<String, Object>();
-		mapJob.put("jobid", jobid);
-
-		Job job = jobRepository.findOne(jobid);
-		if (job!=null) {
-			mapJob.put("status", job.getStatus());
-		}
-		else {
-			mapJob.put("status", JobStatus.error);
-		}
-
-		return mapJob;
 
 	}
+
 
 	/** ====================================================================================== */
 }

@@ -62,6 +62,8 @@ public class Position {
 	
 	private DataSource source = DataSource.ucsc;
 	
+	private Boolean canonical = false;
+	
 	@Relationship(type="LINKS", direction=Relationship.OUTGOING)
 	private  Gene gene;
 	
@@ -206,6 +208,14 @@ public class Position {
 
 	public void setSource(DataSource source) {
 		this.source = source;
+	}
+
+	public Boolean getCanonical() {
+		return canonical;
+	}
+
+	public void setCanonical(Boolean canonical) {
+		this.canonical = canonical;
 	}
 
 	public Gene getGene() {

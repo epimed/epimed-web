@@ -35,7 +35,7 @@
 
 				<!-- User -->
 				<div class="col-md-2">
-					<c:if test="${not empty job.user}"><a href="${pageContext.request.contextPath}/admin/job/${job.user.id}">${job.user.firstName} ${job.user.lastName} (${job.user.id})</a></c:if>
+					<c:if test="${not empty job.user}"><a href="${pageContext.request.contextPath}/admin/job/${job.user.id}">${job.user.firstName} ${job.user.lastName}</a></c:if>
 				</div>
 
 				<!-- Job ID -->
@@ -65,11 +65,22 @@
 					<a
 						href="${pageContext.request.contextPath}/admin/job/delete/${job.id}">delete</a>
 				</div>
-				<div class="col-md-10">
+				<div class="col-md-5">
 					Job submitted on
 					<fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss.SSS"
 						value="${job.submissionDate}" />
 				</div>
+				
+				<div class="col-md-2">
+					Nb of downloads: ${job.nbDownloads}
+				</div>
+				
+				<div class="col-md-3">
+					Last download:
+					<fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss.SSS"
+						value="${job.lastDownload}" />
+				</div>
+				
 			</div>
 
 			<!-- Parameter -->

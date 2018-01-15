@@ -21,6 +21,7 @@ import epimed_web.repository.mongodb.jobs.JobHeaderRepository;
 import epimed_web.repository.mongodb.jobs.JobRepository;
 import epimed_web.service.log.ApplicationLogger;
 import epimed_web.service.mongodb.JobElementService;
+import epimed_web.service.mongodb.JobService;
 import epimed_web.service.mongodb.LogService;
 import epimed_web.service.mongodb.UserService;
 
@@ -45,6 +46,9 @@ public class AdminJobController extends ApplicationLogger {
 
 	@Autowired
 	public JobRepository jobRepository;
+
+	@Autowired
+	public JobService jobService;
 
 	@Autowired
 	public JobElementService jobElementService;
@@ -111,10 +115,10 @@ public class AdminJobController extends ApplicationLogger {
 		if (jobs.isEmpty()) {
 			jobs = jobRepository.findByType(JobType.valueOf(target));
 		}
-		
+
 		// === Find job user ===
 		for (Job job: jobs) {
-			
+
 			User jobuser = userRepository.findByIp(job.getSingleIp());
 			if (jobuser!=null) {
 				job.setUser(jobuser);
@@ -122,8 +126,13 @@ public class AdminJobController extends ApplicationLogger {
 			else {
 				job.setUser(userService.generateDefaultUser());
 			}
-			
+
 		}
+
+		for (Job job : jobs) {
+			job = jobService.truncateListElements(job, 10);
+		}
+
 		model.addAttribute("jobs", jobs);
 
 		return "admin/job";
@@ -143,7 +152,7 @@ public class AdminJobController extends ApplicationLogger {
 			return "error";
 		}
 
-		List<Job> jobs = jobRepository.findLastLogs(300);
+		List<Job> jobs = jobRepository.findLastLogs(50);
 
 		for (Job job: jobs) {
 			User user = userRepository.findByIp(job.getSingleIp());
@@ -153,6 +162,10 @@ public class AdminJobController extends ApplicationLogger {
 			else {
 				job.setUser(userService.generateDefaultUser());
 			}
+
+
+			job = jobService.truncateListElements(job, 10);
+
 		}
 		model.addAttribute("jobs", jobs);
 
