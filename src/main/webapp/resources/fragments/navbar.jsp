@@ -33,7 +33,6 @@
 						<li><a href="${pageContext.request.contextPath}/genes/update">Update a list of gene symbols</a></li>
 						<li><a href="${pageContext.request.contextPath}/genes/probeset">Find probesets for a list of gene symbols</a></li>
 						<li><a href="${pageContext.request.contextPath}/genes/position">Find positions for a list of gene symbols</a></li>
-						<li><a href="${pageContext.request.contextPath}/genes/annotation">Tissue-specific genes</a></li>
 					</ul>
 				</li>
 				
@@ -49,6 +48,7 @@
 						<li><a href="${pageContext.request.contextPath}/apiQueryTissueSpecificGenes">API query for tissue-specific genes</a></li>
 					</ul>
 				</li>
+				<li><a href="${pageContext.request.contextPath}/download">Download</a></li>
 				
 			</ul>
 

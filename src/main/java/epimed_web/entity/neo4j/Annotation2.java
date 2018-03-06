@@ -10,7 +10,7 @@ import org.neo4j.ogm.annotation.Relationship;
 import org.springframework.data.annotation.Id;
 
 @NodeEntity(label="Annotation")
-public class Annotation {
+public class Annotation2 {
 
 	@GraphId 
 	private Long graphId;
@@ -24,12 +24,26 @@ public class Annotation {
 	private String type;
 	private String description;
 	
-
+	@Property(name="tissue_status")
+	private String tissueStatus;
+	
+	@Property(name="tissue_stage")
+	private String tissueStage;
+	
+	@Property(name="tissue_group_level1")
+	private String tissueGroupLevel1;
+	
+	@Property(name="tissue_group_level2")
+	private String tissueGroupLevel2;
+	
+	@Property(name="tissue_group_level3")
+	private String tissueGroupLevel3;
+	
 	@Relationship(type="BELONGS_TO", direction=Relationship.INCOMING)
 	private List<Gene> genes;
 	
 	
-	public Annotation() {
+	public Annotation2() {
 		super();
 	}
 
@@ -95,6 +109,55 @@ public class Annotation {
 
 	
 
+	public String getTissueStatus() {
+		return tissueStatus;
+	}
+
+
+	public void setTissueStatus(String tissueStatus) {
+		this.tissueStatus = tissueStatus;
+	}
+
+
+	public String getTissueStage() {
+		return tissueStage;
+	}
+
+
+	public void setTissueStage(String tissueStage) {
+		this.tissueStage = tissueStage;
+	}
+
+
+	public String getTissueGroupLevel1() {
+		return tissueGroupLevel1;
+	}
+
+
+	public void setTissueGroupLevel1(String tissueGroupLevel1) {
+		this.tissueGroupLevel1 = tissueGroupLevel1;
+	}
+
+
+	public String getTissueGroupLevel2() {
+		return tissueGroupLevel2;
+	}
+
+
+	public void setTissueGroupLevel2(String tissueGroupLevel2) {
+		this.tissueGroupLevel2 = tissueGroupLevel2;
+	}
+
+
+	public String getTissueGroupLevel3() {
+		return tissueGroupLevel3;
+	}
+
+
+	public void setTissueGroupLevel3(String tissueGroupLevel3) {
+		this.tissueGroupLevel3 = tissueGroupLevel3;
+	}
+
 
 	public List<Gene> getGenes() {
 		return genes;
@@ -109,7 +172,9 @@ public class Annotation {
 	@Override
 	public String toString() {
 		return "Annotation [graphId=" + graphId + ", uid=" + uid + ", parameter=" + parameter + ", source=" + source
-				+ ", type=" + type + ", description=" + description + "]";
+				+ ", type=" + type + ", description=" + description + ", tissueStatus=" + tissueStatus
+				+ ", tissueStage=" + tissueStage + ", tissueGroupLevel1=" + tissueGroupLevel1 + ", tissueGroupLevel2="
+				+ tissueGroupLevel2 + ", tissueGroupLevel3=" + tissueGroupLevel3 + "]";
 	}
 
 
