@@ -112,6 +112,7 @@ public class JobElementService extends ApplicationLogger {
 					result.append("location", gene.getLocation());
 					result.append("chrom",gene.getChrom());
 					result.append("status", gene.getStatus().name());
+					result.append("type", gene.getType());
 					result.append("feature", gene.getFeature());
 					result.append("aliases", gene.getAliases()==null ? null : gene.getAliases());
 					result.append("database", ajaxForm.getSource());
@@ -138,6 +139,7 @@ public class JobElementService extends ApplicationLogger {
 						result.append("location", gene.getLocation());
 						result.append("chrom",gene.getChrom());
 						result.append("status", gene.getStatus().name());
+						result.append("type", gene.getType());
 						result.append("feature", gene.getFeature());
 						result.append("aliases", gene.getAliases()==null ? null : gene.getAliases());
 						result.append("database", ajaxForm.getSource());
@@ -203,6 +205,7 @@ public class JobElementService extends ApplicationLogger {
 					result.append("location", gene.getLocation());
 					result.append("chrom",gene.getChrom());
 					result.append("status", gene.getStatus().name());
+					result.append("type", gene.getType());
 					result.append("aliases", gene.getAliases()==null ? null : gene.getAliases());
 					result.append("feature", gene.getFeature());
 					result.append("database", ajaxForm.getSource());
@@ -270,6 +273,7 @@ public class JobElementService extends ApplicationLogger {
 				result.append("location", gene.getLocation());
 				result.append("chrom",gene.getChrom());
 				result.append("status", gene.getStatus().name());
+				result.append("type", gene.getType());
 				result.append("feature", gene.getFeature());
 				result.append("aliases", gene.getAliases()==null ? null : gene.getAliases());
 				result.append("database", ajaxForm.getSource());
