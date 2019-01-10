@@ -21,9 +21,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>10</java.version>
 		<poi.version>3.15</poi.version>
 		<opencsv.version>3.8</opencsv.version>
+		<bootstrap.version>3.3.7</bootstrap.version>
 	</properties>
 
 	<dependencies>
@@ -91,7 +92,7 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
-			<version>3.3.7</version>
+			<version>${bootstrap.version}</version>
 		</dependency>
 
 		<!-- Apache POI - Java API To Access Microsoft Format Files -->

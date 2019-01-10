@@ -20,7 +20,6 @@ import epimed_web.entity.mongodb.jobs.Job;
 import epimed_web.entity.mongodb.jobs.JobStatus;
 import epimed_web.entity.mongodb.jobs.JobType;
 import epimed_web.entity.neo4j.Gene;
-import epimed_web.entity.neo4j.GeneStatus;
 import epimed_web.form.AjaxForm;
 import epimed_web.repository.mongodb.jobs.JobRepository;
 import epimed_web.repository.neo4j.GeneRepository;
@@ -85,6 +84,7 @@ public class ApiRestGeneController extends ApplicationLogger {
 		header.add("location");
 		header.add("chrom");
 		header.add("status");
+		header.add("type");
 		header.add("aliases");
 
 		// === Data ===
@@ -97,28 +97,31 @@ public class ApiRestGeneController extends ApplicationLogger {
 
 			List<String> idAnnotations = formatService.convertStringToList(annotations);
 			suffixAnnotations = idAnnotations.toString().replaceAll("[\\]\\[,;]", "_");
+			suffixAnnotations = formatService.normalize(suffixAnnotations);
 
-			List<Gene> listGenes = geneRepository.findByAnnotationsAndTaxid(idAnnotations, taxid);
-
+			List<Gene> listGenes = geneRepository.findCurrentByAnnotationsAndTaxid(idAnnotations, taxid);
+			
 			for (Gene gene: listGenes) {
-				Object [] dataline = new Object[header.size()];
 
-				if (gene.getStatus().equals(GeneStatus.replaced)) {
-					gene = geneRepository.findCurrentByUid(gene.getUid());
+				if (gene!=null) {
+
+					Object [] dataline = new Object[header.size()];
+
+					int i=0;
+					dataline[i] = gene.getTaxId();
+					dataline[++i] = gene.getUid();
+					dataline[++i] = gene.getGeneSymbol();
+					dataline[++i] = gene.getTitle();
+					dataline[++i] = gene.getLocation();
+					dataline[++i] = gene.getChrom();
+					dataline[++i] = gene.getStatus();
+					dataline[++i] = gene.getType();
+					dataline[++i] = gene.getAliases();
+
+					data.add(dataline);
 				}
-
-				int i=0;
-				dataline[i] = gene.getTaxId();
-				dataline[++i] = gene.getUid();
-				dataline[++i] = gene.getGeneSymbol();
-				dataline[++i] = gene.getTitle();
-				dataline[++i] = gene.getLocation();
-				dataline[++i] = gene.getChrom();
-				dataline[++i] = gene.getStatus();
-				dataline[++i] = gene.getAliases();
-
-				data.add(dataline);
-			}
+			}			
+			
 		}
 
 		// ===== File generation =====
@@ -161,23 +164,23 @@ public class ApiRestGeneController extends ApplicationLogger {
 			@RequestParam(value = "positionType", defaultValue="unique") String positionType
 			) throws InterruptedException, IOException {
 
-		
+
 		boolean validRequest = false;
 		JobType jobtype=null;
-				
+
 		List<String> listElements = formatService.convertStringToList(symbols);
 		Job job = jobRepository.findOne(jobid);
-		
+
 		logger.debug("listElements={}", listElements);
 		logger.debug("job={}", job);
-		
+
 		if (jobid!=null
 				&& !jobid.isEmpty() 
 				&& taxid!=null
 				&& listElements!=null && !listElements.isEmpty()
 				&& job!=null && job.getType().equals(JobType.reserved)	
 				) {
-			
+
 			try {
 				jobtype = JobType.valueOf(jobtypeString);
 				validRequest = true;
@@ -185,19 +188,19 @@ public class ApiRestGeneController extends ApplicationLogger {
 			catch (Exception e) {
 				validRequest = false;
 			}
-			
+
 		}
-		
-		
+
+
 		logger.debug("validRequest={}", validRequest);
-		
+
 		if (validRequest) {
 
 			try  {
-				
+
 				jobService.updateJob(job, jobtype, JobStatus.init, listElements, null);
 
-				
+
 				for (int i=0; i<listElements.size(); i++) {
 
 					String symbol = listElements.get(i);

@@ -49,6 +49,8 @@ public interface GeneRepository extends GraphRepository<Gene> {
 	@Query("MATCH (g:Gene)-[r:BELONGS_TO]->(a:Annotation) WHERE a.uid IN {idAnnotations} AND g.tax_id={taxid} RETURN g ORDER BY g.gene_symbol")
 	public List<Gene> findByAnnotationsAndTaxid(@Param("idAnnotations") List<String> idAnnotations, @Param("taxid") Integer taxid);
 
+	@Query("MATCH (a:Annotation)<-[r:BELONGS_TO]-(g1:Gene)-[*0..1]->(g2:Gene) WHERE a.uid IN {idAnnotations} AND g1.tax_id={taxid} AND NOT g2.status=\"replaced\" RETURN DISTINCT g2 ORDER BY g2.gene_symbol")
+	public List<Gene> findCurrentByAnnotationsAndTaxid(@Param("idAnnotations") List<String> idAnnotations, @Param("taxid") Integer taxid);
 
 	
 }

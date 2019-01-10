@@ -17,17 +17,23 @@
 
 
 	<!-- Container -->
-	<div class="container">
+	<div class="container-fluid">
 
 		<h1>List of annotations</h1>
 
 		<table class="table table-condensed">
 			<thead>
 				<tr>
-					<th>Annotation</th>
-					<th>Source</th>
-					<th>Type</th>
-					<th>Parameter</th>
+					<th>annotation</th>
+					<th>source</th>
+					<th>dataset</th>
+					<th>subtype</th>
+					<th>level</th>
+					<th>tissue</th>
+					<th>stage</th>
+					<th>tissue_group_level1</th>
+					<th>tissue_group_level2</th>
+					<th>tissue_group_level3</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,8 +41,14 @@
 					<tr>
 						<td>${annotation.uid}</td>
 						<td>${annotation.source}</td>
-						<td>${annotation.type}</td>
-						<td>${annotation.parameter}</td>
+						<td>${annotation.dataset}</td>
+						<td>${annotation.subtype}</td>
+						<td>${annotation.level}</td>
+						<td>${annotation.tissue}</td>
+						<td>${annotation.tissueStage}</td>
+						<td>${annotation.tissueGroupLevel1}</td>
+						<td>${annotation.tissueGroupLevel2}</td>
+						<td>${annotation.tissueGroupLevel3}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -41,9 +41,9 @@ df = read.csv2(url, header=TRUE, sep=";")
 	
 	<h3>Example</h3>
 	<p>Humain testis-specific genes as defined by EpiMed from RNA-seq data</p>
-	<p><a href="${globalApplicationRootUrl}/query/genes?annotations=EpiMed_restricted_1_testis_adult&taxid=9606">${globalApplicationRootUrl}/query/genes?annotations=EpiMed_restricted_1_testis_adult&taxid=9606</a></p>
+	<p><a href="${globalApplicationRootUrl}/query/genes?annotations=epimed_tsg2_restricted_1_testis_adult&taxid=9606">${globalApplicationRootUrl}/query/genes?annotations=epimed_tsg2_restricted_1_testis_adult&taxid=9606</a></p>
 <div>
-<pre><code>url = "${globalApplicationRootUrl}/query/genes?annotations=EpiMed_restricted_1_testis_adult&taxid=9606"
+<pre><code>url = "${globalApplicationRootUrl}/query/genes?annotations=epimed_tsg2_restricted_1_testis_adult&taxid=9606"
 df = read.csv2(url, header=TRUE, sep=";")
 </code></pre>
 </div>
