@@ -28,9 +28,9 @@ public class PositionService extends ApplicationLogger {
 			String positionType = parts[1];
 
 			for (Gene gene: ajaxForm.getListGenes()) {
-
+				
 				List<Position> listPositions = positionRepository.findByIdGeneAndIdAssembly(gene.getUid(), idAssembly);
-
+				
 				if (positionType!=null && positionType.equals("unique") && listPositions!=null && !listPositions.isEmpty()) {
 
 					Position unique = positionRepository.findUniqueCanonical(gene.getUid(), idAssembly);

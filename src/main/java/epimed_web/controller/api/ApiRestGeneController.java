@@ -101,6 +101,8 @@ public class ApiRestGeneController extends ApplicationLogger {
 
 			List<Gene> listGenes = geneRepository.findCurrentByAnnotationsAndTaxid(idAnnotations, taxid);
 			
+			logger.debug("Nb of genes exported from database: {}", listGenes.size());
+			
 			for (Gene gene: listGenes) {
 
 				if (gene!=null) {

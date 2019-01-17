@@ -64,6 +64,9 @@ public class Position {
 	
 	private Boolean canonical = false;
 	
+	@Property(name="last_update")
+	private String lastUpdate;
+	
 	@Relationship(type="LINKS", direction=Relationship.OUTGOING)
 	private  Gene gene;
 	
@@ -232,6 +235,14 @@ public class Position {
 
 	public void setAssemblies(List<Assembly> assemblies) {
 		this.assemblies = assemblies;
+	}
+
+	public String getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(String lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	@Override
